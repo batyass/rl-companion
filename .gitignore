@@ -1,0 +1,20 @@
+# dependencies
+node_modules/
+
+# build output
+dist/
+
+# local app state / tooling
+.freebuff/
+.zcode/
+
+# fetch-shop pipeline (regenerate with tools/fetch-shop/refresh.sh)
+tools/fetch-shop/out/
+tools/fetch-shop/.rlshops-token
+tools/fetch-shop/.auto-refresh-state
+tools/fetch-shop/refresh.log
+tools/fetch-shop/__pycache__/
+
+# misc
+*.log
+.DS_Store

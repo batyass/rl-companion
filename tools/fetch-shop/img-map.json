@@ -1,0 +1,17 @@
+{
+  "sparkles": "data/img/purple-sparkles.png",
+  "draco": "data/img/draco-multichrome.png",
+  "heavy metal": "data/img/heavy-metal.png",
+  "oem": "data/img/oem-infinite.png",
+  "fsl-b": "data/img/fslb-flare.png",
+  "cold front": "data/img/cold-front.png",
+  "prism schism": "data/img/prism-schism.png",
+  "lightning": "data/img/lightning-gilded.png",
+  "octane": "data/img/octane-vertebrate.png",
+  "neo-thermal": "data/img/neo-thermal.png",
+  "halo": "data/img/halo-purple.png",
+  "sunset 1986": "data/img/sunset-1986.png",
+  "lamborghini countach lpi 8004": "tools/fetch-shop/out/img/lamborghini-countach-lpi-800-4.png",
+  "aston martin valhalla": "tools/fetch-shop/out/img/aston-martin-valhalla.png",
+  "fslb": "data/img/fslb-flare.png"
+}
