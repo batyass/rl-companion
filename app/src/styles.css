@@ -1,5 +1,7 @@
 /* RL Companion Redesign Design Token System */
 :root {
+  color-scheme: dark;
+
   /* Rocket League Orange & Blue theme */
   --primary-orange: #FF6B00;
   --primary-orange-deep: #F85A1B;
@@ -569,6 +571,18 @@ button:active {
   color: var(--text);
 }
 
+/* Orange ring signals active filters, mirroring the CTA/price accent role */
+.filter-specular-main.active {
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.05),
+    0 0 0 1px var(--orange-line),
+    0 8px 24px rgba(0, 0, 0, 0.25);
+}
+
+.filter-specular-main.active .specular-button__label {
+  color: #FFA45C;
+}
+
 .filter-panel-glass {
   width: 100% !important;
   height: auto !important;
@@ -697,7 +711,7 @@ button:active {
 
 .item-card {
   position: relative;
-  background: var(--surface);
+  background: linear-gradient(160deg, rgba(26, 33, 48, 0.72), rgba(18, 23, 33, 0.55));
   border: 1px solid var(--line);
   border-radius: var(--radius);
   padding: 16px;
@@ -705,6 +719,9 @@ button:active {
   flex-direction: column;
   gap: 12px;
   cursor: pointer;
+  backdrop-filter: blur(10px) saturate(1.4);
+  -webkit-backdrop-filter: blur(10px) saturate(1.4);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
   transition: transform 160ms ease-out, border-color 160ms ease-out, box-shadow 160ms ease-out;
   overflow: hidden;
 }
@@ -712,14 +729,17 @@ button:active {
 .item-card:hover {
   transform: translateY(-2px);
   border-color: var(--line-strong);
-  box-shadow: var(--shadow-sm);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 14px 34px rgba(0, 0, 0, 0.45);
 }
 
 .item-tile {
   position: relative;
   aspect-ratio: 1.2;
   border-radius: var(--radius-sm);
-  background: var(--surface-2);
+  background: rgba(255, 255, 255, 0.035);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -729,15 +749,17 @@ button:active {
 .item-art {
   width: 100%;
   height: 100%;
-  background-size: contain;
-  background-position: center;
-  background-repeat: no-repeat;
+  object-fit: contain;
   filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.5));
 }
 
 .visual-glyph {
   font-size: 36px;
   color: var(--text-2);
+}
+
+.modal-art-panel .visual-glyph {
+  font-size: 72px;
 }
 
 .paint-chip {
@@ -831,6 +853,16 @@ button:active {
   text-transform: capitalize;
 }
 
+/* Rarity dot: carries the in-game rarity color on every card */
+.rarity-inline i {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: currentColor;
+  box-shadow: 0 0 6px currentColor;
+  flex-shrink: 0;
+}
+
 /* Rarity Colors */
 /* In-game rarity colors: rare=blue, very rare=purple, import=red, black market=pink */
 .rarity-common { color: #B0B0B0; }
@@ -866,13 +898,16 @@ button:active {
   flex-shrink: 0;
 }
 
-/* Bundles Section */
+/* Bundles Section — same glass language as the item cards */
 .bundle-shop {
   margin-bottom: 24px;
-  background: var(--surface);
+  background: linear-gradient(160deg, rgba(26, 33, 48, 0.72), rgba(18, 23, 33, 0.55));
   border: 1px solid var(--line);
   border-radius: var(--radius);
   overflow: hidden;
+  backdrop-filter: blur(10px) saturate(1.4);
+  -webkit-backdrop-filter: blur(10px) saturate(1.4);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
 }
 
 .bundle-heading {
@@ -1136,6 +1171,11 @@ button:active {
     background: var(--bg) !important;
     backdrop-filter: none !important;
   }
+  .item-card, .bundle-shop {
+    background: var(--surface) !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
 }
 
 @media (prefers-contrast: more) {
@@ -1161,7 +1201,8 @@ button:active {
   border-radius: 20px;
 }
 
-/* Rarity Glow Effects (Black Market, Exotic, Import, Very Rare) */
+/* Rarity Glow Effects — every rarity gets its in-game color as a gradient
+   border at rest, intensifying on hover; common stays a neutral hairline */
 .item-card {
   position: relative;
   isolation: isolate;
@@ -1181,45 +1222,71 @@ button:active {
   transition: opacity 200ms ease;
 }
 
-.item-card.rarity-black-market::before {
-  background: linear-gradient(135deg, #e535ff, #8b00ff, #ff007f);
-  opacity: 0.8;
+.item-card:hover::before {
+  opacity: 1;
 }
 
-.item-card.rarity-exotic::before {
-  background: linear-gradient(135deg, #ffe600, #ff9900, #ffaa00);
-  opacity: 0.85;
+.item-card.rarity-uncommon::before {
+  background: linear-gradient(135deg, #4DD0E1, rgba(77, 208, 225, 0.15));
+  opacity: 0.55;
 }
 
-.item-card.rarity-import::before {
-  background: linear-gradient(135deg, #ff2e55, #e60026);
-  opacity: 0.75;
+.item-card.rarity-rare::before {
+  background: linear-gradient(135deg, #4B69FF, rgba(75, 105, 255, 0.15));
+  opacity: 0.6;
 }
 
 .item-card.rarity-very-rare::before {
   background: linear-gradient(135deg, #00A3FF, #0072CE);
+  opacity: 0.6;
+}
+
+.item-card.rarity-import::before {
+  background: linear-gradient(135deg, #ff2e55, #e60026);
+  opacity: 0.65;
+}
+
+.item-card.rarity-exotic::before {
+  background: linear-gradient(135deg, #ffe600, #ff9900, #ffaa00);
+  opacity: 0.7;
+}
+
+.item-card.rarity-black-market::before {
+  background: linear-gradient(135deg, #e535ff, #8b00ff, #ff007f);
   opacity: 0.7;
 }
 
 .item-card.rarity-limited::before {
   background: linear-gradient(135deg, #00e676, #00A3FF);
-  opacity: 0.7;
+  opacity: 0.6;
 }
 
-.item-card.rarity-black-market:hover {
-  box-shadow: 0 0 24px rgba(229, 53, 255, 0.35);
+.item-card.rarity-uncommon:hover {
+  box-shadow: 0 0 20px rgba(77, 208, 225, 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.08);
 }
 
-.item-card.rarity-exotic:hover {
-  box-shadow: 0 0 24px rgba(255, 204, 0, 0.35);
-}
-
-.item-card.rarity-import:hover {
-  box-shadow: 0 0 24px rgba(255, 46, 85, 0.3);
+.item-card.rarity-rare:hover {
+  box-shadow: 0 0 20px rgba(75, 105, 255, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.08);
 }
 
 .item-card.rarity-very-rare:hover {
-  box-shadow: 0 0 20px rgba(0, 163, 255, 0.25);
+  box-shadow: 0 0 20px rgba(0, 163, 255, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.item-card.rarity-import:hover {
+  box-shadow: 0 0 24px rgba(255, 46, 85, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.item-card.rarity-exotic:hover {
+  box-shadow: 0 0 24px rgba(255, 204, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.item-card.rarity-black-market:hover {
+  box-shadow: 0 0 24px rgba(229, 53, 255, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.item-card.rarity-limited:hover {
+  box-shadow: 0 0 20px rgba(21, 230, 181, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.08);
 }
 
 /* Keyboard hint chip */
@@ -1272,6 +1339,27 @@ button:active {
 
 .pill-glass.pill-timer .glass-surface__content {
   font-variant-numeric: tabular-nums;
+}
+
+/* Primary CTA: RL-orange gradient fill under the glass rim restores the
+   primary/ghost hierarchy the transparent pills lost */
+.pill-glass.pill-primary {
+  border-color: rgba(255, 138, 61, 0.55);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.22),
+    0 8px 24px rgba(255, 107, 0, 0.28);
+}
+
+.pill-glass.pill-primary .glass-surface__content {
+  background: linear-gradient(90deg, #FF6B00, #F85A1B 60%, #FF8A3D);
+  color: #fff;
+}
+
+.pill-glass.pill-primary:hover {
+  filter: brightness(1.07);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.28),
+    0 10px 32px rgba(255, 107, 0, 0.4);
 }
 
 /* Live LED: the light sits BEHIND the glass so the GlassSurface

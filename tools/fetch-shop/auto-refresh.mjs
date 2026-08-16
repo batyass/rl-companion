@@ -25,8 +25,11 @@ const SHOP_FILE = path.join(SHOP_DIR, "out", "shop.json");
 const LOG_FILE = path.join(SHOP_DIR, "refresh.log");
 const STATE_FILE = path.join(SHOP_DIR, ".auto-refresh-state");
 
-// Refresh when the data is older than this (the shop rotates ~daily).
-const STALE_MS = 20 * 60 * 60 * 1000;
+// Refresh when the data is older than this. The shop rotates ~daily at a
+// fixed hour, so a sub-day window means the site never lags more than this
+// plus the hourly check interval behind rlshop.gg. Fetches are cheap: the
+// rlshop.gg path is a handful of JSON requests with locally cached images.
+const STALE_MS = 3 * 60 * 60 * 1000;
 // Don't retry a failed refresh more than once an hour.
 const RETRY_MS = 60 * 60 * 1000;
 

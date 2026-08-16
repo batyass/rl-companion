@@ -2,9 +2,9 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import {
   demoItems,
   SHOP_ORDER,
-  SHOP_LABELS,
-  NAV_GROUPS,
-  MOBILE_TABS,
+  shopLabel,
+  navGroupsFor,
+  mobileTabsFor,
   rarityKey,
   formatPrice,
   paintClass,
@@ -254,6 +254,26 @@ function fmtTime(ms) {
 // Fetched /api/shop data stores unix seconds; the local seed uses ms epochs.
 const endMs = (ts) => (ts ? (ts > 1e11 ? ts : ts * 1000) : 0);
 
+// The rlshop.gg mirror sometimes assigns one product id to several distinct
+// items (e.g. a team's decal and goal explosion). Duplicate ids collide as
+// React keys and silently drop cards from the grid, so suffix any repeat
+// (-2, -3, …) to keep every item addressable.
+function withUniqueIds(list) {
+  const seen = new Set();
+  return (list || []).map((it, idx) => {
+    const base = it.id || `${it.shop || "item"}-${idx}`;
+    if (!seen.has(base)) {
+      seen.add(base);
+      return it;
+    }
+    let n = 2;
+    while (seen.has(`${base}-${n}`)) n += 1;
+    const id = `${base}-${n}`;
+    seen.add(id);
+    return { ...it, id };
+  });
+}
+
 function EmptyState({ onClear }) {
   return (
     <div className="empty-state">
@@ -261,6 +281,25 @@ function EmptyState({ onClear }) {
       <p>Try a different search query or clear your active filters.</p>
       <button className="clear-button" onClick={onClear}>Clear filters</button>
     </div>
+  );
+}
+
+// Item artwork with a graceful fallback: a handful of mirror entries point at
+// asset files that don't exist locally, and the card should fall back to the
+// glyph instead of rendering an empty tile.
+function ItemArt({ item, className }) {
+  const [failed, setFailed] = useState(false);
+  if (!item.image || failed) {
+    return <span className="visual-glyph" aria-hidden="true">{item.visual || "✦"}</span>;
+  }
+  return (
+    <img
+      src={item.image}
+      alt={item.name}
+      className={className || "item-art"}
+      loading="lazy"
+      onError={() => setFailed(true)}
+    />
   );
 }
 
@@ -275,11 +314,7 @@ function ItemCard({ item, onOpen, timeLeft }) {
       aria-label={`View ${item.name} details`}
     >
       <div className="item-tile">
-        {item.image ? (
-          <div className="item-art" style={{ backgroundImage: `url(${item.image})` }} role="img" aria-label={item.name} />
-        ) : (
-          <span className="visual-glyph" aria-hidden="true">{item.visual || "✦"}</span>
-        )}
+        <ItemArt item={item} />
         {item.paint && <span className={`paint-chip ${paintClass(item.paint)}`}>{item.paint}</span>}
         {item.endDate && <span className="time-chip">{timeLeft}</span>}
       </div>
@@ -300,11 +335,7 @@ function ContentCard({ content }) {
   return (
     <article className={`item-card content-card rarity-${rarityClass}`}>
       <div className="item-tile">
-        {content.image ? (
-          <div className="item-art" style={{ backgroundImage: `url(${content.image})` }} role="img" aria-label={content.name} />
-        ) : (
-          <span className="visual-glyph" aria-hidden="true">{content.visual || "✦"}</span>
-        )}
+        <ItemArt item={content} />
         {content.paint && <span className={`paint-chip ${paintClass(content.paint)}`}>{content.paint}</span>}
       </div>
       <div className="item-details">
@@ -391,11 +422,7 @@ function ItemModal({ item, saved, onClose, onToggleFavorite }) {
     >
       <div className="modal-dialog" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
         <div className="modal-art-panel">
-          {item.image ? (
-            <img src={item.image} alt={item.name} className="modal-art-image" />
-          ) : (
-            <span className="visual-glyph" style={{ fontSize: "72px" }}>{item.visual || "✦"}</span>
-          )}
+          <ItemArt item={item} className="modal-art-image" />
         </div>
         <div className="modal-details-panel">
           <div className="modal-header">
@@ -425,7 +452,7 @@ function ItemModal({ item, saved, onClose, onToggleFavorite }) {
 }
 
 export default function App() {
-  const [items, setItems] = useState(demoItems);
+  const [items, setItems] = useState(() => withUniqueIds(demoItems));
   const [activeShop, setActiveShop] = useState(() => {
     return localStorage.getItem("rl-shop-active") || "featured";
   });
@@ -476,17 +503,30 @@ export default function App() {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, []);
 
-  // Fetch shop items from API if available
-  useEffect(() => {
-    fetch("/api/shop")
-      .then((res) => (res.ok ? res.json() : null))
-      .then((data) => {
-        if (data && Array.isArray(data.items) && data.items.length > 0) {
-          setItems(data.items);
-        }
-      })
-      .catch(() => {});
+  // Fetch shop items from the API if available. The data file refreshes in
+  // the background (rlshop.gg pipeline), so an open tab re-checks every few
+  // minutes and hot-swaps the items when a newer file lands — no reload.
+  const lastGeneratedRef = useRef(null);
+  const loadLiveItems = useCallback(async () => {
+    try {
+      const res = await fetch("/api/shop", { cache: "no-store" });
+      if (!res.ok) return;
+      const data = await res.json();
+      if (!data || !Array.isArray(data.items) || data.items.length === 0) return;
+      const generated = data.generatedAt ?? 0;
+      if (lastGeneratedRef.current === generated) return;
+      lastGeneratedRef.current = generated;
+      setItems(withUniqueIds(data.items));
+    } catch {
+      /* offline or no backend — keep whatever is on screen */
+    }
   }, []);
+
+  useEffect(() => {
+    loadLiveItems();
+    const timer = setInterval(loadLiveItems, 5 * 60 * 1000);
+    return () => clearInterval(timer);
+  }, [loadLiveItems]);
 
   const handleSelectShop = (shopKey) => {
     setActiveShop(shopKey);
@@ -511,6 +551,20 @@ export default function App() {
     });
     return map;
   }, [items]);
+
+  // Collab shops rotate daily, so both navs are derived from the loaded items.
+  const navGroups = useMemo(() => navGroupsFor(items.map((it) => it.shop)), [items]);
+  const mobileTabs = useMemo(() => mobileTabsFor(items.map((it) => it.shop)), [items]);
+
+  // A persisted shop selection can point at a tab that no longer exists in
+  // today's rotation — fall back to the featured shop instead of an empty grid.
+  useEffect(() => {
+    if (items.length === 0) return;
+    if (!items.some((it) => it.shop === activeShop)) {
+      handleSelectShop("featured");
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [items, activeShop]);
 
   const counts = useMemo(() => {
     const res = {};
@@ -585,7 +639,7 @@ export default function App() {
             beamWidth={2}
             beamHeight={15}
             beamNumber={12}
-            lightColor="#06B6D4"
+            lightColor="#00A3FF"
             speed={2}
             noiseIntensity={1.75}
             scale={0.2}
@@ -617,7 +671,7 @@ export default function App() {
       </header>
 
       <Sidebar
-        groups={NAV_GROUPS}
+        groups={navGroups}
         counts={counts}
         active={activeShop}
         onSelect={handleSelectShop}
@@ -891,7 +945,7 @@ export default function App() {
 
         <div key={activeShop} className="shop-content">
           <h2 style={{ fontSize: "20px", fontWeight: "700", marginBottom: "16px" }}>
-            {SHOP_LABELS[activeShop] || activeShop}
+            {shopLabel(activeShop)}
           </h2>
 
           {(() => {
@@ -942,7 +996,7 @@ export default function App() {
       </main>
 
       <BottomBar
-        tabs={MOBILE_TABS}
+        tabs={mobileTabs}
         active={activeShop}
         onSelect={handleSelectShop}
         counts={counts}

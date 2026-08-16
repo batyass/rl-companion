@@ -10,7 +10,7 @@ import {
   Package,
   Trophy,
 } from "lucide-react";
-import { SHOP_LABELS } from "../data.js";
+import { shopLabel } from "../data.js";
 import {
   Sidebar as SidebarPanel,
   SidebarProvider,
@@ -51,7 +51,8 @@ const SHOP_ICONS = {
 };
 
 function ShopIcon({ shopKey }) {
-  const Icon = SHOP_ICONS[shopKey] || Sparkles;
+  // Unknown slugs are rotating car collabs, so the car glyph is the fallback.
+  const Icon = SHOP_ICONS[shopKey] || Car;
   return <Icon size={16} strokeWidth={1.75} aria-hidden="true" />;
 }
 
@@ -111,7 +112,7 @@ export default function Sidebar({
                     {groupShops.map((shopKey) => {
                       const isActive = active === shopKey;
                       const count = counts[shopKey] || 0;
-                      const label = SHOP_LABELS[shopKey] || shopKey;
+                      const label = shopLabel(shopKey);
                       return (
                         <SidebarMenuItem key={shopKey}>
                           <SidebarMenuButton

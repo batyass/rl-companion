@@ -1180,6 +1180,55 @@ export const MOBILE_TABS = [
   { shop: "rlcs", label: "RLCS", glyph: "🏆" },
 ];
 
+// The collab shops rotate daily (cybertruck, valhalla, bmw, …), so the nav is
+// derived from whatever shops the loaded items actually contain instead of a
+// hardcoded list. These are the fixed slots; every other slug lands in the
+// dynamically built Special Collabs group.
+const FIXED_SHOPS = new Set(["featured", "supersonic", "bundles", "rlcs"]);
+
+const LABEL_OVERRIDES = {
+  bmw: "BMW",
+};
+
+export function shopLabel(slug) {
+  if (SHOP_LABELS[slug]) return SHOP_LABELS[slug];
+  if (LABEL_OVERRIDES[slug]) return LABEL_OVERRIDES[slug];
+  return String(slug || "")
+    .replace(/[-_]+/g, " ")
+    .replace(/\b\w/g, (c) => c.toUpperCase());
+}
+
+export function navGroupsFor(shops) {
+  const present = new Set(shops);
+  const fixed = (keys) => keys.filter((k) => present.has(k));
+  const collabs = Array.from(present)
+    .filter((s) => !FIXED_SHOPS.has(s))
+    .sort((a, b) => shopLabel(a).localeCompare(shopLabel(b)));
+  const groups = [];
+  const daily = fixed(["featured", "supersonic"]);
+  if (daily.length > 0) groups.push({ id: "daily", label: "Daily Shops", shops: daily });
+  if (collabs.length > 0) groups.push({ id: "collabs", label: "Special Collabs", shops: collabs });
+  const bundles = fixed(["bundles"]);
+  if (bundles.length > 0) groups.push({ id: "bundles", label: "Bundles", shops: bundles });
+  const rlcs = fixed(["rlcs"]);
+  if (rlcs.length > 0) groups.push({ id: "rlcs", label: "RLCS", shops: rlcs });
+  return groups;
+}
+
+export function mobileTabsFor(shops) {
+  const present = new Set(shops);
+  const tabs = [];
+  if (present.has("featured")) tabs.push({ shop: "featured", label: "Featured", glyph: "✦" });
+  if (present.has("supersonic")) tabs.push({ shop: "supersonic", label: "Daily", glyph: "⚡" });
+  const firstCollab = Array.from(present)
+    .filter((s) => !FIXED_SHOPS.has(s))
+    .sort((a, b) => shopLabel(a).localeCompare(shopLabel(b)))[0];
+  if (firstCollab) tabs.push({ shop: firstCollab, label: "Collabs", glyph: "🏎" });
+  if (present.has("bundles")) tabs.push({ shop: "bundles", label: "Bundles", glyph: "📦" });
+  if (present.has("rlcs")) tabs.push({ shop: "rlcs", label: "RLCS", glyph: "🏆" });
+  return tabs;
+}
+
 // slug -> rarity key used for authentic in-game rarity glow colors.
 export function rarityKey(rarity) {
   return String(rarity || "")

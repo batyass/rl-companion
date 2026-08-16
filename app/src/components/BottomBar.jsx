@@ -1,5 +1,5 @@
 import React from "react";
-import { SHOP_LABELS } from "../data.js";
+import { shopLabel } from "../data.js";
 
 export default function BottomBar({ tabs = [], active, onSelect = () => {}, counts = {} }) {
   return (
@@ -7,7 +7,7 @@ export default function BottomBar({ tabs = [], active, onSelect = () => {}, coun
       {tabs.map((tab) => {
         const isActive = active === tab.shop;
         const count = counts[tab.shop] || 0;
-        const label = tab.label || SHOP_LABELS[tab.shop] || tab.shop;
+        const label = tab.label || shopLabel(tab.shop);
 
         return (
           <button
