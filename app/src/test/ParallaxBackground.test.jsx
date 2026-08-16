@@ -4,13 +4,11 @@ import { render } from "@testing-library/react";
 import ParallaxBackground from "../components/ParallaxBackground.jsx";
 
 describe("ParallaxBackground component", () => {
-  it("renders background layers with aria-hidden", () => {
+  it("renders the dark veil with aria-hidden", () => {
     const { container } = render(<ParallaxBackground />);
     const parallaxEl = container.querySelector(".parallax");
     expect(parallaxEl).toBeInTheDocument();
     expect(parallaxEl).toHaveAttribute("aria-hidden", "true");
-    expect(container.querySelector(".parallax-hex")).toBeInTheDocument();
-    expect(container.querySelector(".parallax-orbs")).toBeInTheDocument();
-    expect(container.querySelector(".parallax-dots")).toBeInTheDocument();
+    expect(container.querySelector(".dark-veil")).toBeInTheDocument();
   });
 });

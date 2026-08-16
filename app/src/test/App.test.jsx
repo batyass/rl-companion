@@ -87,16 +87,20 @@ describe("App component (Integration & Edge Cases)", () => {
     });
   });
 
-  it("opens filter panel and filters items by rarity", () => {
+  it("opens filter panel and filters items by rarity", async () => {
     render(<App />);
     
     const filterToggle = screen.getByRole("button", { name: /Filters/i });
     fireEvent.click(filterToggle);
 
-    expect(screen.getByText("Item Type")).toBeInTheDocument();
+    expect(screen.getByRole("combobox", { name: "Item Type" })).toBeInTheDocument();
 
-    const raritySelect = screen.getByLabelText("Rarity");
-    fireEvent.change(raritySelect, { target: { value: "Black Market" } });
+    const rarityTrigger = screen.getByRole("combobox", { name: "Rarity" });
+    fireEvent.click(rarityTrigger);
+
+    const blackMarket = await screen.findByRole("option", { name: "Black Market" });
+    fireEvent.pointerDown(blackMarket);
+    fireEvent.click(blackMarket);
 
     expect(getItemCardText("Draco (Earth)")).toBeInTheDocument();
     expect(cardTextCount("Del Rey")).toBe(0);

@@ -1,5 +1,30 @@
 import React from "react";
+import {
+  Sparkles,
+  Gauge,
+  Car,
+  Shield,
+  Flame,
+  Clock,
+  Flag,
+  Package,
+  Trophy,
+} from "lucide-react";
 import { SHOP_LABELS } from "../data.js";
+import {
+  Sidebar as SidebarPanel,
+  SidebarProvider,
+  SidebarHeader,
+  SidebarContent,
+  SidebarGroup,
+  SidebarGroupLabel,
+  SidebarGroupContent,
+  SidebarMenu,
+  SidebarMenuItem,
+  SidebarMenuButton,
+  SidebarMenuBadge,
+  SidebarTrigger,
+} from "./ui/sidebar.jsx";
 
 function BrandMark() {
   return (
@@ -10,6 +35,24 @@ function BrandMark() {
       </g>
     </svg>
   );
+}
+
+// Minimalist SF-Symbol-style icons (thin-stroke, monochrome), one per shop.
+const SHOP_ICONS = {
+  featured: Sparkles,
+  supersonic: Gauge,
+  cybertruck: Car,
+  beskar: Shield,
+  playingfire: Flame,
+  bttf: Clock,
+  mclaren: Flag,
+  bundles: Package,
+  rlcs: Trophy,
+};
+
+function ShopIcon({ shopKey }) {
+  const Icon = SHOP_ICONS[shopKey] || Sparkles;
+  return <Icon size={16} strokeWidth={1.75} aria-hidden="true" />;
 }
 
 export default function Sidebar({
@@ -23,74 +66,82 @@ export default function Sidebar({
   onClose = () => {},
 }) {
   return (
-    <>
+    <SidebarProvider
+      open={!collapsed}
+      onOpenChange={() => onToggle()}
+      openMobile={mobileOpen}
+      onOpenMobileChange={(open) => {
+        if (!open) onClose();
+      }}
+    >
       {mobileOpen && (
-        <div
-          className="sidebar-backdrop"
-          onClick={onClose}
-          aria-hidden="true"
-        />
+        <div className="sidebar-backdrop" onClick={onClose} aria-hidden="true" />
       )}
-      <aside
-        className={`sidebar ${collapsed ? "collapsed" : ""} ${mobileOpen ? "mobile-open" : ""}`}
-        aria-label="Shop Navigation"
-      >
-        <div className="sidebar-header">
+      <SidebarPanel collapsible="icon" ariaLabel="Shop Navigation">
+        <SidebarHeader>
           <div className="sidebar-brand" onClick={() => onSelect("featured")}>
             <BrandMark />
             <span className="brand-name">RL Companion</span>
           </div>
-          <button
+          <SidebarTrigger
             className="collapse-toggle"
-            onClick={onToggle}
-            aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
             title={collapsed ? "Expand sidebar" : "Collapse sidebar"}
           >
-            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
               <polyline points={collapsed ? "13 17 18 12 13 7" : "11 17 6 12 11 7"} />
               <polyline points={collapsed ? "6 17 11 12 6 7" : "18 17 13 12 18 7"} />
             </svg>
-          </button>
+          </SidebarTrigger>
           {mobileOpen && (
             <button className="mobile-close" onClick={onClose} aria-label="Close menu">
               ✕
             </button>
           )}
-        </div>
+        </SidebarHeader>
 
-        <nav className="sidebar-nav">
+        <SidebarContent className="sidebar-nav">
           {groups.map((group) => {
             const groupShops = (group.shops || []).filter((s) => (counts[s] || 0) >= 0);
             if (groupShops.length === 0) return null;
             return (
-              <div key={group.id} className="nav-group">
-                <div className="group-label">{group.label}</div>
-                {groupShops.map((shopKey) => {
-                  const isActive = active === shopKey;
-                  const count = counts[shopKey] || 0;
-                  const label = SHOP_LABELS[shopKey] || shopKey;
-                  return (
-                    <button
-                      key={shopKey}
-                      className={`nav-item ${isActive ? "active" : ""}`}
-                      onClick={() => {
-                        onSelect(shopKey);
-                        if (mobileOpen && onClose) onClose();
-                      }}
-                      aria-current={isActive ? "page" : undefined}
-                      title={label}
-                    >
-                      <span className="nav-item-indicator" aria-hidden="true" />
-                      <span className="nav-item-label">{label}</span>
-                      {count > 0 && <span className="nav-item-count">{count}</span>}
-                    </button>
-                  );
-                })}
-              </div>
+              <SidebarGroup key={group.id} className="nav-group">
+                <SidebarGroupLabel className="group-label">{group.label}</SidebarGroupLabel>
+                <SidebarGroupContent>
+                  <SidebarMenu>
+                    {groupShops.map((shopKey) => {
+                      const isActive = active === shopKey;
+                      const count = counts[shopKey] || 0;
+                      const label = SHOP_LABELS[shopKey] || shopKey;
+                      return (
+                        <SidebarMenuItem key={shopKey}>
+                          <SidebarMenuButton
+                            className="nav-item"
+                            isActive={isActive}
+                            onClick={() => {
+                              onSelect(shopKey);
+                              if (mobileOpen && onClose) onClose();
+                            }}
+                            aria-current={isActive ? "page" : undefined}
+                            title={label}
+                          >
+                            <span className="nav-item-icon" aria-hidden="true">
+                              <ShopIcon shopKey={shopKey} />
+                            </span>
+                            <span className="nav-item-label">{label}</span>
+                            {count > 0 && (
+                              <SidebarMenuBadge className="nav-item-count">{count}</SidebarMenuBadge>
+                            )}
+                          </SidebarMenuButton>
+                        </SidebarMenuItem>
+                      );
+                    })}
+                  </SidebarMenu>
+                </SidebarGroupContent>
+              </SidebarGroup>
             );
           })}
-        </nav>
-      </aside>
-    </>
+        </SidebarContent>
+      </SidebarPanel>
+    </SidebarProvider>
   );
 }

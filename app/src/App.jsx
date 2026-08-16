@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { animate, eases } from "animejs";
 import {
   demoItems,
   SHOP_ORDER,
@@ -11,9 +10,88 @@ import {
   paintClass,
 } from "./data.js";
 import GlassSurface from "./reactbits/GlassSurface.jsx";
-import ParallaxBackground from "./components/ParallaxBackground.jsx";
+import SpecularButton from "./reactbits/SpecularButton.jsx";
+import Counter from "./reactbits/Counter.jsx";
+import Beams from "./reactbits/Beams.jsx";
+import { Select, SelectTrigger, SelectValue, SelectPortal, SelectPositioner, SelectPopup, SelectItem } from "./components/ui/select.jsx";
 import Sidebar from "./components/Sidebar.jsx";
 import BottomBar from "./components/BottomBar.jsx";
+
+const supportsWebGL = (() => {
+  if (typeof document === "undefined" || typeof WebGLRenderingContext === "undefined") return false;
+  try {
+    const c = document.createElement("canvas");
+    return !!(c.getContext("webgl2") || c.getContext("webgl"));
+  } catch {
+    return false;
+  }
+})();
+
+// Complete Rocket League filter vocabularies. These are the full item-type,
+// paint, and rarity sets from the game, not just whatever happens to be in
+// today's shop — so the filters stay complete even when a type/paint/rarity
+// has zero items in the current rotation.
+const ITEM_TYPES = [
+  "Body",
+  "Decal",
+  "Paint Finish",
+  "Wheels",
+  "Rocket Boost",
+  "Topper",
+  "Antenna",
+  "Goal Explosion",
+  "Trail",
+  "Player Banner",
+  "Avatar Border",
+  "Player Anthem",
+  "Engine Audio",
+];
+
+const PAINT_COLORS = [
+  "Black",
+  "Titanium White",
+  "Grey",
+  "Crimson",
+  "Pink",
+  "Cobalt",
+  "Sky Blue",
+  "Burnt Sienna",
+  "Saffron",
+  "Lime",
+  "Forest Green",
+  "Orange",
+  "Purple",
+];
+
+const RARITIES = [
+  "Common",
+  "Uncommon",
+  "Rare",
+  "Very Rare",
+  "Import",
+  "Exotic",
+  "Black Market",
+  "Limited",
+  "Premium",
+  "Legacy",
+];
+
+// Build a filter option list: the "All …" sentinel first, then the full
+// canonical vocabulary, then any extra values the live data happens to use
+// (e.g. "Animated Decal") so nothing in the pipeline is ever unfilterable.
+function filterOptions(allLabel, canonical, extras) {
+  const seen = new Set();
+  const out = [{ label: allLabel, value: "all" }];
+  const push = (label) => {
+    if (label && !seen.has(label)) {
+      seen.add(label);
+      out.push({ label, value: label });
+    }
+  };
+  canonical.forEach(push);
+  Array.from(extras).sort().forEach(push);
+  return out;
+}
 
 function BrandMark() {
   return (
@@ -36,27 +114,23 @@ function BrandMark() {
   );
 }
 
-function useCountUp(target, duration = 1600) {
-  const [value, setValue] = useState(0);
-  useEffect(() => {
-    const counter = { v: 0 };
-    const animation = animate(counter, {
-      v: target,
-      duration,
-      ease: eases.outExpo,
-      onUpdate: () => setValue(Math.round(counter.v)),
-    });
-    return () => animation?.pause?.();
-  }, [target, duration]);
-  return value;
-}
-
-function StatCounter({ value, suffix, label }) {
-  const display = useCountUp(value);
+function StatCounter({ value, suffix, label, places }) {
   return (
     <div className="hero-stat">
-      <strong>{display.toLocaleString()}{suffix}</strong>
-      <span>{label}</span>
+      <strong>
+        <Counter
+          value={value}
+          places={places}
+          fontSize={30}
+          padding={4}
+          gap={0}
+          textColor="#F5F5F7"
+          fontWeight={600}
+          gradientHeight={0}
+        />
+        {suffix ? <span className="stat-suffix">{suffix}</span> : null}
+      </strong>
+      <span className="stat-label">{label}</span>
     </div>
   );
 }
@@ -76,7 +150,7 @@ function ActivityMarquee({ items }) {
   if (activity.length === 0) return null;
 
   return (
-    <div className="activity-marquee" aria-label="Recent shop activity">
+    <GlassSurface className="marquee-glass" width="100%" height="auto" borderRadius={999} backgroundOpacity={0} saturation={1.6} displace={0} distortionScale={-30} aria-label="Recent shop activity">
       <span className="marquee-label"><span className="live-dot" />Live</span>
       <div className="marquee-track-wrapper">
         <div className="marquee-track">
@@ -88,7 +162,7 @@ function ActivityMarquee({ items }) {
           ))}
         </div>
       </div>
-    </div>
+    </GlassSurface>
   );
 }
 
@@ -465,6 +539,10 @@ export default function App() {
     return Array.from(set).sort();
   }, [currentItems]);
 
+  const typeItems = filterOptions("All Types", ITEM_TYPES, availableTypes);
+  const paintItems = filterOptions("All Paints", PAINT_COLORS, availablePaints);
+  const rarityItems = filterOptions("All Rarities", RARITIES, availableRarities);
+
   const filteredItems = useMemo(() => {
     const q = (search || "").trim().toLowerCase();
     return currentItems.filter((i) => {
@@ -501,8 +579,20 @@ export default function App() {
 
   return (
     <div className={`app-layout ${sidebarCollapsed ? "sidebar-collapsed" : ""}`}>
-      <ParallaxBackground />
-
+      <div className="beams-bg" aria-hidden="true">
+        {supportsWebGL ? (
+          <Beams
+            beamWidth={2}
+            beamHeight={15}
+            beamNumber={12}
+            lightColor="#06B6D4"
+            speed={2}
+            noiseIntensity={1.75}
+            scale={0.2}
+            rotation={0}
+          />
+        ) : null}
+      </div>
       <header className="topbar">
         <button
           className="icon-button"
@@ -539,98 +629,264 @@ export default function App() {
 
       <main className="main-content">
         <section className="hero-card">
-          <div className="hero-glow" />
-          <GlassSurface className="hero-glass" width="100%" height="100%" borderRadius={22} backgroundOpacity={0.35} saturation={1.4}>
-            <div className="hero-content">
-              <h1 className="hero-title">What's in the shop today?</h1>
-              <p className="hero-subtext">Official Rocket League daily item rotation mirror with live timers & bundles.</p>
-              <div className="hero-cta-row">
-                <button
-                  className="cta-btn primary"
-                  onClick={() => {
-                    handleSelectShop("featured");
-                    window.scrollTo({ top: 0, behavior: "smooth" });
-                  }}
-                >
-                  Browse Today's Shop
-                </button>
-                <button
-                  className="cta-btn ghost"
-                  onClick={() => {
-                    const widget = document.querySelector(".companion-fab");
-                    widget?.click();
-                  }}
-                >
-                  Open Companion Chat
-                </button>
-              </div>
+          <div className="hero-content">
+            <h1 className="hero-title">What's in the shop today?</h1>
+            <p className="hero-subtext">Official Rocket League daily item rotation mirror with live timers & bundles.</p>
+            <div className="hero-cta-row">
+              <GlassSurface
+                className="pill-glass pill-primary"
+                width="auto"
+                height="auto"
+                borderRadius={999}
+                backgroundOpacity={0}
+                saturation={1.6}
+                displace={0}
+                onClick={() => {
+                  handleSelectShop("featured");
+                  window.scrollTo({ top: 0, behavior: "smooth" });
+                }}
+                onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); handleSelectShop("featured"); window.scrollTo({ top: 0, behavior: "smooth" }); } }}
+                role="button"
+                tabIndex={0}
+              >
+                Browse Today's Shop
+              </GlassSurface>
+              <GlassSurface
+                className="pill-glass pill-ghost"
+                width="auto"
+                height="auto"
+                borderRadius={999}
+                backgroundOpacity={0}
+                saturation={1.6}
+                displace={0}
+                onClick={() => {
+                  const widget = document.querySelector(".companion-fab");
+                  widget?.click();
+                }}
+                onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); document.querySelector(".companion-fab")?.click(); } }}
+                role="button"
+                tabIndex={0}
+              >
+                Open Companion Chat
+              </GlassSurface>
             </div>
-            <div className="hero-meta">
-              <span className="live-chip">
-                <span className="live-dot" />
+          </div>
+          <div className="hero-meta">
+            <span className="live-pill">
+              <span className="live-led" aria-hidden="true" />
+              <GlassSurface className="pill-glass pill-live" width="auto" height="auto" borderRadius={999} backgroundOpacity={0} saturation={1.6} displace={0} distortionScale={-30}>
                 Live item shop
-              </span>
-              {earliestEndDate && (
-                <span className="countdown-chip">
-                  ⏱ {fmtTime(heroSeconds)}
-                </span>
-              )}
-            </div>
-            <div className="hero-stats">
-              <StatCounter value={items.length} suffix="" label="Items tracked" />
-              <StatCounter value={48213} suffix="+" label="Players notified" />
-              <StatCounter value={114} suffix="ms" label="Bot response" />
-            </div>
-          </GlassSurface>
+              </GlassSurface>
+            </span>
+            {earliestEndDate && (
+              <GlassSurface className="pill-glass pill-timer" width="auto" height="auto" borderRadius={999} backgroundOpacity={0} saturation={1.6} displace={0}>
+                ⏱ {fmtTime(heroSeconds)}
+              </GlassSurface>
+            )}
+          </div>
+          <div className="hero-stats">
+            <StatCounter value={items.length} label="Items tracked" />
+            <StatCounter value={48213} suffix="+" label="Players notified" places={[10000, 1000, ",", 100, 10, 1]} />
+            <StatCounter value={114} suffix="ms" label="Bot response" places={[100, 10, 1]} />
+          </div>
         </section>
 
         <ActivityMarquee items={items} />
 
         <section className="toolbar">
-          <div className="search-wrapper">
-            <span className="search-icon">🔍</span>
-            <input
-              ref={searchInputRef}
-              type="text"
-              className="search-input"
-              placeholder="Search items by name..."
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
+          <div className="search-wrap">
+            <SpecularButton
+              size="sm"
+              radius={999}
+              tint="#ffffff"
+              tintOpacity={0}
+              blur={0}
+              textColor="#f5f5f5"
+              lineColor="#ffffff"
+              baseColor="#3a404d"
+              intensity={1}
+              shineSize={12}
+              shineFade={40}
+              thickness={1}
+              speed={0.35}
+              followMouse
+              proximity={220}
+              autoAnimate={false}
+              className="search-specular"
+              tabIndex={-1}
+              aria-hidden="true"
+              children=""
             />
-            <span className="kbd-hint">/</span>
+            <div className="search-field">
+              <span className="search-icon">🔍</span>
+              <input
+                ref={searchInputRef}
+                type="text"
+                className="search-input"
+                placeholder="Search items by name..."
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+              />
+              <span className="kbd-hint">/</span>
+            </div>
           </div>
-          <button
-            className={`filter-toggle-btn ${filtersOpen || typeFilter !== "all" || paintFilter !== "all" || rarityFilter !== "all" ? "active" : ""}`}
+          <SpecularButton
+            size="sm"
+            radius={999}
+            tint="#ffffff"
+            tintOpacity={0}
+            blur={0}
+            textColor="#f5f5f5"
+            lineColor="#ffffff"
+            baseColor="#3a404d"
+            intensity={1}
+            shineSize={12}
+            shineFade={40}
+            thickness={1}
+            speed={0.35}
+            followMouse
+            proximity={220}
+            autoAnimate={false}
+            className={`filter-specular-main ${filtersOpen || typeFilter !== "all" || paintFilter !== "all" || rarityFilter !== "all" ? "active" : ""}`}
             onClick={() => setFiltersOpen((v) => !v)}
+            aria-expanded={filtersOpen}
           >
-            <span>⚡ Filters</span>
-          </button>
+            ⚡ Filters
+          </SpecularButton>
         </section>
 
         {filtersOpen && (
-          <div className="filter-panel open">
-            <div className="filter-group">
-              <label className="filter-label" htmlFor="type-filter">Item Type</label>
-              <select id="type-filter" className="filter-select" value={typeFilter} onChange={(e) => setTypeFilter(e.target.value)}>
-                <option value="all">All Types</option>
-                {availableTypes.map((t) => <option key={t} value={t}>{t}</option>)}
-              </select>
-            </div>
-            <div className="filter-group">
-              <label className="filter-label" htmlFor="paint-filter">Paint</label>
-              <select id="paint-filter" className="filter-select" value={paintFilter} onChange={(e) => setPaintFilter(e.target.value)}>
-                <option value="all">All Paints</option>
-                {availablePaints.map((p) => <option key={p} value={p}>{p}</option>)}
-              </select>
-            </div>
-            <div className="filter-group">
-              <label className="filter-label" htmlFor="rarity-filter">Rarity</label>
-              <select id="rarity-filter" className="filter-select" value={rarityFilter} onChange={(e) => setRarityFilter(e.target.value)}>
-                <option value="all">All Rarities</option>
-                {availableRarities.map((r) => <option key={r} value={r}>{r}</option>)}
-              </select>
-            </div>
-          </div>
+          <GlassSurface
+            className="filter-panel-glass"
+            width="100%"
+            height="auto"
+            borderRadius={22}
+            backgroundOpacity={0}
+            saturation={1.6}
+            displace={0}
+            distortionScale={-30}
+          >
+            <Select value={typeFilter} onValueChange={(v) => setTypeFilter(v ?? "all")} items={typeItems}>
+              <div className="filter-select-wrap">
+                <SpecularButton
+                  size="sm"
+                  radius={999}
+                  tint="#ffffff"
+                  tintOpacity={0.12}
+                  blur={0}
+                  textColor="#f5f5f5"
+                  lineColor="#ffffff"
+                  baseColor="#3a404d"
+                  intensity={1}
+                  shineSize={12}
+                  shineFade={40}
+                  thickness={1}
+                  speed={0.35}
+                  followMouse
+                  proximity={220}
+                  autoAnimate={false}
+                  className="filter-specular"
+                  tabIndex={-1}
+                  aria-hidden="true"
+                >
+                  {typeFilter === "all" ? "All Types" : typeFilter}
+                  <span className="filter-chevron">▾</span>
+                </SpecularButton>
+                <SelectTrigger className="filter-select-trigger" aria-label="Item Type">
+                  <SelectValue />
+                </SelectTrigger>
+              </div>
+              <SelectPortal>
+                <SelectPositioner className="filter-select-positioner" align="start" sideOffset={8}>
+                  <SelectPopup className="filter-select-popup">
+                    {typeItems.map((item) => (
+                      <SelectItem key={item.value} value={item.value}>{item.label}</SelectItem>
+                    ))}
+                  </SelectPopup>
+                </SelectPositioner>
+              </SelectPortal>
+            </Select>
+            <Select value={paintFilter} onValueChange={(v) => setPaintFilter(v ?? "all")} items={paintItems}>
+              <div className="filter-select-wrap">
+                <SpecularButton
+                  size="sm"
+                  radius={999}
+                  tint="#ffffff"
+                  tintOpacity={0.12}
+                  blur={0}
+                  textColor="#f5f5f5"
+                  lineColor="#ffffff"
+                  baseColor="#3a404d"
+                  intensity={1}
+                  shineSize={12}
+                  shineFade={40}
+                  thickness={1}
+                  speed={0.35}
+                  followMouse
+                  proximity={220}
+                  autoAnimate={false}
+                  className="filter-specular"
+                  tabIndex={-1}
+                  aria-hidden="true"
+                >
+                  {paintFilter === "all" ? "All Paints" : paintFilter}
+                  <span className="filter-chevron">▾</span>
+                </SpecularButton>
+                <SelectTrigger className="filter-select-trigger" aria-label="Paint">
+                  <SelectValue />
+                </SelectTrigger>
+              </div>
+              <SelectPortal>
+                <SelectPositioner className="filter-select-positioner" align="start" sideOffset={8}>
+                  <SelectPopup className="filter-select-popup">
+                    {paintItems.map((item) => (
+                      <SelectItem key={item.value} value={item.value}>{item.label}</SelectItem>
+                    ))}
+                  </SelectPopup>
+                </SelectPositioner>
+              </SelectPortal>
+            </Select>
+            <Select value={rarityFilter} onValueChange={(v) => setRarityFilter(v ?? "all")} items={rarityItems}>
+              <div className="filter-select-wrap">
+                <SpecularButton
+                  size="sm"
+                  radius={999}
+                  tint="#ffffff"
+                  tintOpacity={0.12}
+                  blur={0}
+                  textColor="#f5f5f5"
+                  lineColor="#ffffff"
+                  baseColor="#3a404d"
+                  intensity={1}
+                  shineSize={12}
+                  shineFade={40}
+                  thickness={1}
+                  speed={0.35}
+                  followMouse
+                  proximity={220}
+                  autoAnimate={false}
+                  className="filter-specular"
+                  tabIndex={-1}
+                  aria-hidden="true"
+                >
+                  {rarityFilter === "all" ? "All Rarities" : rarityFilter}
+                  <span className="filter-chevron">▾</span>
+                </SpecularButton>
+                <SelectTrigger className="filter-select-trigger" aria-label="Rarity">
+                  <SelectValue />
+                </SelectTrigger>
+              </div>
+              <SelectPortal>
+                <SelectPositioner className="filter-select-positioner" align="start" sideOffset={8}>
+                  <SelectPopup className="filter-select-popup">
+                    {rarityItems.map((item) => (
+                      <SelectItem key={item.value} value={item.value}>{item.label}</SelectItem>
+                    ))}
+                  </SelectPopup>
+                </SelectPositioner>
+              </SelectPortal>
+            </Select>
+          </GlassSurface>
         )}
 
         <div key={activeShop} className="shop-content">
