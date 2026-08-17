@@ -49,6 +49,21 @@ SHOP_SLUGS = {
 
 FALLBACK_RARITY = {"rlcs": "Limited"}
 
+# Newer shop items the community product dump doesn't know yet (the dump is
+# refreshed less often than the shop rotates). Keyed by product id; `quality`
+# maps to the rarity via ref/qualities.json. McLaren x Daft Punk crossfade and
+# anthem set, confirmed against rlshop.gg's live shop.
+PRODUCT_OVERRIDES = {
+    "12049": {"quality": 5},  # Daft Punk — Goal Explosion, Exotic
+    "12215": {"quality": 5},  # Daft Punk Eternal — Wheels, Exotic
+    "12167": {"quality": 4},  # Daft Punk Vinyl — Wheels, Import
+    "12123": {"quality": 4},  # Crossfade — Rocket Boost, Import
+    "12278": {"quality": 3},  # Crossfade — Trail, Very Rare
+    "12352": {"quality": 2},  # Get Lucky — Player Anthem, Rare
+    "12371": {"quality": 2},  # I Feel It Coming / Starboy — Player Anthem, Rare
+    "12396": {"quality": 2},  # One More Time — Player Anthem, Rare
+}
+
 
 def load_ref(name):
     with open(os.path.join(HERE, "ref", name)) as handle:
@@ -88,7 +103,7 @@ def decode_item(ref, val, paints, products, qualities):
     item = {k: val(v) for k, v in raw.items()}
     thumbnail = item.get("thumbnail") or ""
     pid = re.split(r"[./]", os.path.basename(thumbnail))[0] if thumbnail else ""
-    product = products.get(pid, {})
+    product = {**products.get(pid, {}), **PRODUCT_OVERRIDES.get(pid, {})}
     quality = product.get("quality")
     return {
         "pid": pid,
@@ -248,10 +263,14 @@ def main():
                     # unpriced groups (RLCS teams) flatten to plain items
                     for ci, iref in enumerate(group.get("items") or []):
                         items_out.append(to_item(resolve(iref), slug, f"g{gi}-{ci}"))
-        else:
-            items_ref = page.get("items") or []
-            for ii, iref in enumerate(items_ref):
-                items_out.append(to_item(resolve(iref), slug, ii))
+        # Standalone items ride alongside bundle groups on the same page —
+        # e.g. McLaren x Daft Punk lists the car bundle *and* the individual
+        # wheels/boosts/trails/anthems. Previously only the `else` branch read
+        # them, so any shop with a priced bundle silently dropped every
+        # non-bundle item.
+        items_ref = page.get("items") or []
+        for ii, iref in enumerate(items_ref):
+            items_out.append(to_item(resolve(iref), slug, ii))
         time.sleep(0.4)  # stay polite between shop pages
 
     if not items_out:

@@ -150,7 +150,7 @@ function ActivityMarquee({ items }) {
   if (activity.length === 0) return null;
 
   return (
-    <GlassSurface className="marquee-glass" width="100%" height="auto" borderRadius={999} backgroundOpacity={0} saturation={1.6} displace={0} distortionScale={-30} aria-label="Recent shop activity">
+    <GlassSurface className="marquee-glass" width="100%" height="auto" borderRadius={999} backgroundOpacity={0.1} saturation={1.6} displace={0} distortionScale={-180} borderWidth={0.15} aria-label="Recent shop activity">
       <span className="marquee-label"><span className="live-dot" />Live</span>
       <div className="marquee-track-wrapper">
         <div className="marquee-track">
@@ -692,9 +692,11 @@ export default function App() {
                 width="auto"
                 height="auto"
                 borderRadius={999}
-                backgroundOpacity={0}
+                backgroundOpacity={0.1}
                 saturation={1.6}
                 displace={0}
+                distortionScale={-180}
+                borderWidth={0.15}
                 onClick={() => {
                   handleSelectShop("featured");
                   window.scrollTo({ top: 0, behavior: "smooth" });
@@ -710,9 +712,11 @@ export default function App() {
                 width="auto"
                 height="auto"
                 borderRadius={999}
-                backgroundOpacity={0}
+                backgroundOpacity={0.1}
                 saturation={1.6}
                 displace={0}
+                distortionScale={-180}
+                borderWidth={0.15}
                 onClick={() => {
                   const widget = document.querySelector(".companion-fab");
                   widget?.click();
@@ -728,12 +732,12 @@ export default function App() {
           <div className="hero-meta">
             <span className="live-pill">
               <span className="live-led" aria-hidden="true" />
-              <GlassSurface className="pill-glass pill-live" width="auto" height="auto" borderRadius={999} backgroundOpacity={0} saturation={1.6} displace={0} distortionScale={-30}>
+              <GlassSurface className="pill-glass pill-live" width="auto" height="auto" borderRadius={999} backgroundOpacity={0.1} saturation={1.6} displace={0} distortionScale={-30} borderWidth={0.15}>
                 Live item shop
               </GlassSurface>
             </span>
             {earliestEndDate && (
-              <GlassSurface className="pill-glass pill-timer" width="auto" height="auto" borderRadius={999} backgroundOpacity={0} saturation={1.6} displace={0}>
+              <GlassSurface className="pill-glass pill-timer" width="auto" height="auto" borderRadius={999} backgroundOpacity={0.1} saturation={1.6} displace={0} distortionScale={-180} borderWidth={0.15}>
                 ⏱ {fmtTime(heroSeconds)}
               </GlassSurface>
             )}
@@ -815,10 +819,11 @@ export default function App() {
             width="100%"
             height="auto"
             borderRadius={22}
-            backgroundOpacity={0}
+            backgroundOpacity={0.1}
             saturation={1.6}
             displace={0}
-            distortionScale={-30}
+            distortionScale={-180}
+            borderWidth={0.15}
           >
             <Select value={typeFilter} onValueChange={(v) => setTypeFilter(v ?? "all")} items={typeItems}>
               <div className="filter-select-wrap">
