@@ -14,7 +14,7 @@ export const demoItems = [
   "visual": "✦",
   "paint": "Cobalt",
   "endDate": NOW + 26*HOUR,
-  "image": "/rl-art/10399.webp",
+  "image": "rl-art/10399.webp",
   },
   {
   "id": "featured-63",
@@ -26,7 +26,7 @@ export const demoItems = [
   "visual": "✦",
   "paint": "Black",
   "endDate": NOW + 26*HOUR,
-  "image": "/rl-art/63.webp",
+  "image": "rl-art/63.webp",
   },
   {
   "id": "featured-10809",
@@ -49,7 +49,7 @@ export const demoItems = [
   "visual": "✦",
   "paint": "Saffron",
   "endDate": NOW + 2.2*HOUR,
-  "image": "/rl-art/9745.webp",
+  "image": "rl-art/9745.webp",
   },
   {
   "id": "featured-11181",
@@ -60,7 +60,7 @@ export const demoItems = [
   "price": 400,
   "visual": "✦",
   "endDate": NOW + 2.2*HOUR,
-  "image": "/rl-art/11181.webp",
+  "image": "rl-art/11181.webp",
   },
   {
   "id": "featured-11288",
@@ -72,7 +72,7 @@ export const demoItems = [
   "visual": "✦",
   "paint": "Cobalt",
   "endDate": NOW + 2.2*HOUR,
-  "image": "/rl-art/11288.webp",
+  "image": "rl-art/11288.webp",
   },
   {
   "id": "featured-5257",
@@ -84,7 +84,7 @@ export const demoItems = [
   "visual": "✦",
   "paint": "Purple",
   "endDate": NOW + 2.2*HOUR,
-  "image": "/rl-art/5257.webp",
+  "image": "rl-art/5257.webp",
   },
   {
   "id": "featured-10020",
@@ -95,7 +95,7 @@ export const demoItems = [
   "price": 300,
   "visual": "✦",
   "endDate": NOW + 2.2*HOUR,
-  "image": "/rl-art/10020.webp",
+  "image": "rl-art/10020.webp",
   },
   {
   "id": "supersonic-4284",
@@ -107,7 +107,7 @@ export const demoItems = [
   "visual": "✦",
   "paint": "Purple",
   "endDate": NOW + 2.2*HOUR,
-  "image": "/rl-art/4284.webp",
+  "image": "rl-art/4284.webp",
   },
   {
   "id": "supersonic-1691",
@@ -119,7 +119,7 @@ export const demoItems = [
   "visual": "✦",
   "paint": "Crimson",
   "endDate": NOW + 2.2*HOUR,
-  "image": "/rl-art/1691.webp",
+  "image": "rl-art/1691.webp",
   },
   {
   "id": "supersonic-8913",
@@ -130,7 +130,7 @@ export const demoItems = [
   "price": 300,
   "visual": "✦",
   "endDate": NOW + 2.2*HOUR,
-  "image": "/rl-art/8913.webp",
+  "image": "rl-art/8913.webp",
   },
   {
   "id": "supersonic-4369",
@@ -142,7 +142,7 @@ export const demoItems = [
   "visual": "✦",
   "paint": "Cobalt",
   "endDate": NOW + 2.2*HOUR,
-  "image": "/rl-art/4369.webp",
+  "image": "rl-art/4369.webp",
   },
   {
   "id": "supersonic-9147",
@@ -154,7 +154,7 @@ export const demoItems = [
   "visual": "✦",
   "paint": "Purple",
   "endDate": NOW + 2.2*HOUR,
-  "image": "/rl-art/9147.webp",
+  "image": "rl-art/9147.webp",
   },
   {
   "id": "supersonic-2364",
@@ -165,7 +165,7 @@ export const demoItems = [
   "price": 50,
   "visual": "✦",
   "endDate": NOW + 2.2*HOUR,
-  "image": "/rl-art/2364.webp",
+  "image": "rl-art/2364.webp",
   },
   {
   "id": "supersonic-3146",
@@ -177,7 +177,7 @@ export const demoItems = [
   "visual": "✦",
   "paint": "Sky Blue",
   "endDate": NOW + 2.2*HOUR,
-  "image": "/rl-art/3146.webp",
+  "image": "rl-art/3146.webp",
   },
   {
   "id": "supersonic-5810",
@@ -188,7 +188,7 @@ export const demoItems = [
   "price": 50,
   "visual": "✦",
   "endDate": NOW + 2.2*HOUR,
-  "image": "/rl-art/5810.webp",
+  "image": "rl-art/5810.webp",
   },
   {
   "id": "cybertruck-bundle-7012",
@@ -200,14 +200,14 @@ export const demoItems = [
   "bundle": true,
   "contents": [{"pid": "7012", "name": "Tesla Cybertruck", "type": "Body"}, {"pid": "10526", "name": "Tesla Cybertruck: OMG", "type": "Decal"}, {"pid": "10502", "name": "Tesla Cybertruck: Matte Black", "type": "Decal"}, {"pid": "10520", "name": "Tesla Cybertruck: CyberCamo", "type": "Decal"}, {"pid": "10503", "name": "Tesla Cybertruck: Stainless Steel", "type": "Decal"}, {"pid": "10512", "name": "Cyber", "type": "Wheels"}],
   "endDate": NOW + 128*HOUR,
-  "image": "/rl-art/7012.webp",
+  "image": "rl-art/7012.webp",
   "contents": [
-    {"id": "cybertruck-7012-0", "name": "Tesla Cybertruck", "type": "Body", "image": "/rl-art/7012.webp"},
-    {"id": "cybertruck-10526-1", "name": "Tesla Cybertruck: OMG", "type": "Decal", "image": "/rl-art/10526.webp"},
-    {"id": "cybertruck-10502-2", "name": "Tesla Cybertruck: Matte Black", "type": "Decal", "image": "/rl-art/10502.webp"},
-    {"id": "cybertruck-10520-3", "name": "Tesla Cybertruck: CyberCamo", "type": "Decal", "image": "/rl-art/10520.webp"},
-    {"id": "cybertruck-10503-4", "name": "Tesla Cybertruck: Stainless Steel", "type": "Decal", "image": "/rl-art/10503.webp"},
-    {"id": "cybertruck-10512-5", "name": "Cyber", "type": "Wheels", "image": "/rl-art/10512.webp"},
+    {"id": "cybertruck-7012-0", "name": "Tesla Cybertruck", "type": "Body", "image": "rl-art/7012.webp"},
+    {"id": "cybertruck-10526-1", "name": "Tesla Cybertruck: OMG", "type": "Decal", "image": "rl-art/10526.webp"},
+    {"id": "cybertruck-10502-2", "name": "Tesla Cybertruck: Matte Black", "type": "Decal", "image": "rl-art/10502.webp"},
+    {"id": "cybertruck-10520-3", "name": "Tesla Cybertruck: CyberCamo", "type": "Decal", "image": "rl-art/10520.webp"},
+    {"id": "cybertruck-10503-4", "name": "Tesla Cybertruck: Stainless Steel", "type": "Decal", "image": "rl-art/10503.webp"},
+    {"id": "cybertruck-10512-5", "name": "Cyber", "type": "Wheels", "image": "rl-art/10512.webp"},
   ],
   },
   {
@@ -219,7 +219,7 @@ export const demoItems = [
   "price": 400,
   "visual": "✦",
   "endDate": NOW + 128*HOUR,
-  "image": "/rl-art/10517.webp",
+  "image": "rl-art/10517.webp",
   },
   {
   "id": "cybertruck-10674",
@@ -230,7 +230,7 @@ export const demoItems = [
   "price": 200,
   "visual": "✦",
   "endDate": NOW + 128*HOUR,
-  "image": "/rl-art/10674.webp",
+  "image": "rl-art/10674.webp",
   },
   {
   "id": "beskar-bundle-10044",
@@ -242,18 +242,18 @@ export const demoItems = [
   "bundle": true,
   "contents": [{"pid": "10044", "name": "Beskar", "type": "Body"}, {"pid": "10130", "name": "Beskar: Boba Fett", "type": "Decal"}, {"pid": "10213", "name": "Beskar: The Armorer", "type": "Decal"}, {"pid": "10214", "name": "Beskar: Sabine Wren", "type": "Decal"}, {"pid": "10212", "name": "Beskar: Bo-Katan Kryze", "type": "Decal"}, {"pid": "10131", "name": "Beskar (Din Djarin)", "type": "Wheels"}, {"pid": "10132", "name": "Beskar (Boba Fett)", "type": "Wheels"}, {"pid": "10134", "name": "Beskar (The Armorer)", "type": "Wheels"}, {"pid": "10236", "name": "Beskar (Sabine Wren)", "type": "Wheels"}, {"pid": "10133", "name": "Beskar (Bo-Katan Kryze)", "type": "Wheels"}],
   "endDate": NOW + 104*HOUR,
-  "image": "/rl-art/10044.webp",
+  "image": "rl-art/10044.webp",
   "contents": [
-    {"id": "beskar-10044-0", "name": "Beskar", "type": "Body", "image": "/rl-art/10044.webp"},
-    {"id": "beskar-10130-1", "name": "Beskar: Boba Fett", "type": "Decal", "image": "/rl-art/10130.webp"},
-    {"id": "beskar-10213-2", "name": "Beskar: The Armorer", "type": "Decal", "image": "/rl-art/10213.webp"},
-    {"id": "beskar-10214-3", "name": "Beskar: Sabine Wren", "type": "Decal", "image": "/rl-art/10214.webp"},
-    {"id": "beskar-10212-4", "name": "Beskar: Bo-Katan Kryze", "type": "Decal", "image": "/rl-art/10212.webp"},
-    {"id": "beskar-10131-5", "name": "Beskar (Din Djarin)", "type": "Wheels", "image": "/rl-art/10131.webp"},
-    {"id": "beskar-10132-6", "name": "Beskar (Boba Fett)", "type": "Wheels", "image": "/rl-art/10132.webp"},
-    {"id": "beskar-10134-7", "name": "Beskar (The Armorer)", "type": "Wheels", "image": "/rl-art/10134.webp"},
-    {"id": "beskar-10236-8", "name": "Beskar (Sabine Wren)", "type": "Wheels", "image": "/rl-art/10236.webp"},
-    {"id": "beskar-10133-9", "name": "Beskar (Bo-Katan Kryze)", "type": "Wheels", "image": "/rl-art/10133.webp"},
+    {"id": "beskar-10044-0", "name": "Beskar", "type": "Body", "image": "rl-art/10044.webp"},
+    {"id": "beskar-10130-1", "name": "Beskar: Boba Fett", "type": "Decal", "image": "rl-art/10130.webp"},
+    {"id": "beskar-10213-2", "name": "Beskar: The Armorer", "type": "Decal", "image": "rl-art/10213.webp"},
+    {"id": "beskar-10214-3", "name": "Beskar: Sabine Wren", "type": "Decal", "image": "rl-art/10214.webp"},
+    {"id": "beskar-10212-4", "name": "Beskar: Bo-Katan Kryze", "type": "Decal", "image": "rl-art/10212.webp"},
+    {"id": "beskar-10131-5", "name": "Beskar (Din Djarin)", "type": "Wheels", "image": "rl-art/10131.webp"},
+    {"id": "beskar-10132-6", "name": "Beskar (Boba Fett)", "type": "Wheels", "image": "rl-art/10132.webp"},
+    {"id": "beskar-10134-7", "name": "Beskar (The Armorer)", "type": "Wheels", "image": "rl-art/10134.webp"},
+    {"id": "beskar-10236-8", "name": "Beskar (Sabine Wren)", "type": "Wheels", "image": "rl-art/10236.webp"},
+    {"id": "beskar-10133-9", "name": "Beskar (Bo-Katan Kryze)", "type": "Wheels", "image": "rl-art/10133.webp"},
   ],
   },
   {
@@ -266,14 +266,14 @@ export const demoItems = [
   "bundle": true,
   "contents": [{"pid": "4284", "name": "Fennec", "type": "Body"}, {"pid": "2966", "name": "Fire God", "type": "Animated Decal"}, {"pid": "1908", "name": "Hellfire", "type": "Goal Explosion"}, {"pid": "4294", "name": "Pyrrhos: Inverted", "type": "Wheels"}, {"pid": "1092", "name": "Pixel Fire", "type": "Rocket Boost"}, {"pid": "1899", "name": "Blazer", "type": "Trail"}],
   "endDate": NOW + 104*HOUR,
-  "image": "/rl-art/2966.webp",
+  "image": "rl-art/2966.webp",
   "contents": [
-    {"id": "playingfire-4284-0", "name": "Fennec", "type": "Body", "image": "/rl-art/4284.webp"},
-    {"id": "playingfire-2966-1", "name": "Fire God", "type": "Animated Decal", "image": "/rl-art/2966.webp"},
-    {"id": "playingfire-1908-2", "name": "Hellfire", "type": "Goal Explosion", "image": "/rl-art/1908.webp"},
-    {"id": "playingfire-4294-3", "name": "Pyrrhos: Inverted", "type": "Wheels", "image": "/rl-art/4294.webp"},
-    {"id": "playingfire-1092-4", "name": "Pixel Fire", "type": "Rocket Boost", "image": "/rl-art/1092.webp"},
-    {"id": "playingfire-1899-5", "name": "Blazer", "type": "Trail", "image": "/rl-art/1899.webp"},
+    {"id": "playingfire-4284-0", "name": "Fennec", "type": "Body", "image": "rl-art/4284.webp"},
+    {"id": "playingfire-2966-1", "name": "Fire God", "type": "Animated Decal", "image": "rl-art/2966.webp"},
+    {"id": "playingfire-1908-2", "name": "Hellfire", "type": "Goal Explosion", "image": "rl-art/1908.webp"},
+    {"id": "playingfire-4294-3", "name": "Pyrrhos: Inverted", "type": "Wheels", "image": "rl-art/4294.webp"},
+    {"id": "playingfire-1092-4", "name": "Pixel Fire", "type": "Rocket Boost", "image": "rl-art/1092.webp"},
+    {"id": "playingfire-1899-5", "name": "Blazer", "type": "Trail", "image": "rl-art/1899.webp"},
   ],
   },
   {
@@ -286,14 +286,14 @@ export const demoItems = [
   "bundle": true,
   "contents": [{"pid": "597", "name": "Back To The Future Time Machine", "type": "Body"}, {"pid": "12358", "name": "Back To The Future Time Machine: Time Stream", "type": "Animated Decal"}, {"pid": "12359", "name": "Back To The Future Time Machine: Time Frost", "type": "Decal"}, {"pid": "6269", "name": "Back To The Future Time Machine: Time Machine Grey", "type": "Decal"}, {"pid": "6209", "name": "Back To The Future Time Machine", "type": "Wheels"}, {"pid": "609", "name": "Back To The Future Time Machine", "type": "Wheels"}],
   "endDate": NOW + 80*HOUR,
-  "image": "/rl-art/597.webp",
+  "image": "rl-art/597.webp",
   "contents": [
-    {"id": "bttf-597-0", "name": "Back To The Future Time Machine", "type": "Body", "image": "/rl-art/597.webp"},
-    {"id": "bttf-12358-1", "name": "Back To The Future Time Machine: Time Stream", "type": "Animated Decal", "image": "/rl-art/12358.webp"},
-    {"id": "bttf-12359-2", "name": "Back To The Future Time Machine: Time Frost", "type": "Decal", "image": "/rl-art/12359.webp"},
-    {"id": "bttf-6269-3", "name": "Back To The Future Time Machine: Time Machine Grey", "type": "Decal", "image": "/rl-art/6269.webp"},
-    {"id": "bttf-6209-4", "name": "Back To The Future Time Machine", "type": "Wheels", "image": "/rl-art/6209.webp"},
-    {"id": "bttf-609-5", "name": "Back To The Future Time Machine", "type": "Wheels", "image": "/rl-art/609.webp"},
+    {"id": "bttf-597-0", "name": "Back To The Future Time Machine", "type": "Body", "image": "rl-art/597.webp"},
+    {"id": "bttf-12358-1", "name": "Back To The Future Time Machine: Time Stream", "type": "Animated Decal", "image": "rl-art/12358.webp"},
+    {"id": "bttf-12359-2", "name": "Back To The Future Time Machine: Time Frost", "type": "Decal", "image": "rl-art/12359.webp"},
+    {"id": "bttf-6269-3", "name": "Back To The Future Time Machine: Time Machine Grey", "type": "Decal", "image": "rl-art/6269.webp"},
+    {"id": "bttf-6209-4", "name": "Back To The Future Time Machine", "type": "Wheels", "image": "rl-art/6209.webp"},
+    {"id": "bttf-609-5", "name": "Back To The Future Time Machine", "type": "Wheels", "image": "rl-art/609.webp"},
   ],
   },
   {
@@ -305,7 +305,7 @@ export const demoItems = [
   "price": 400,
   "visual": "✦",
   "endDate": NOW + 80*HOUR,
-  "image": "/rl-art/626.webp",
+  "image": "rl-art/626.webp",
   },
   {
   "id": "bttf-1966",
@@ -316,7 +316,7 @@ export const demoItems = [
   "price": 300,
   "visual": "✦",
   "endDate": NOW + 80*HOUR,
-  "image": "/rl-art/1966.webp",
+  "image": "rl-art/1966.webp",
   },
   {
   "id": "mclaren-bundle-6247",
@@ -328,26 +328,26 @@ export const demoItems = [
   "bundle": true,
   "contents": [{"pid": "6247", "name": "McLaren 765LT", "type": "Body"}, {"pid": "6989", "name": "McLaren 765LT: McLaren 765 (Silver)", "type": "Decal"}, {"pid": "12189", "name": "McLaren 765LT: GM08", "type": "Animated Decal"}, {"pid": "12190", "name": "McLaren 765LT: TB3", "type": "Animated Decal"}, {"pid": "6752", "name": "McLaren 765LT", "type": "Wheels"}, {"pid": "6752", "name": "McLaren 765LT", "type": "Wheels", "paint": "Crimson"}, {"pid": "6752", "name": "McLaren 765LT", "type": "Wheels", "paint": "Lime"}, {"pid": "6752", "name": "McLaren 765LT", "type": "Wheels", "paint": "Sky Blue"}, {"pid": "6752", "name": "McLaren 765LT", "type": "Wheels", "paint": "Cobalt"}, {"pid": "6752", "name": "McLaren 765LT", "type": "Wheels", "paint": "Burnt Sienna"}, {"pid": "6752", "name": "McLaren 765LT", "type": "Wheels", "paint": "Forest Green"}, {"pid": "6752", "name": "McLaren 765LT", "type": "Wheels", "paint": "Purple"}, {"pid": "6752", "name": "McLaren 765LT", "type": "Wheels", "paint": "Pink"}, {"pid": "6752", "name": "McLaren 765LT", "type": "Wheels", "paint": "Orange"}, {"pid": "6752", "name": "McLaren 765LT", "type": "Wheels", "paint": "Grey"}, {"pid": "6752", "name": "McLaren 765LT", "type": "Wheels", "paint": "Titanium White"}, {"pid": "6752", "name": "McLaren 765LT", "type": "Wheels", "paint": "Saffron"}, {"pid": "7015", "name": "McLaren 765LT (Black)", "type": "Wheels"}],
   "endDate": NOW + 56*HOUR,
-  "image": "/rl-art/6247.webp",
+  "image": "rl-art/6247.webp",
   "contents": [
-    {"id": "mclaren-6247-0", "name": "McLaren 765LT", "type": "Body", "image": "/rl-art/6247.webp"},
-    {"id": "mclaren-6989-1", "name": "McLaren 765LT: McLaren 765 (Silver)", "type": "Decal", "image": "/rl-art/6989.webp"},
-    {"id": "mclaren-12189-2", "name": "McLaren 765LT: GM08", "type": "Animated Decal", "image": "/rl-art/12189.webp"},
-    {"id": "mclaren-12190-3", "name": "McLaren 765LT: TB3", "type": "Animated Decal", "image": "/rl-art/12190.webp"},
-    {"id": "mclaren-6752-4", "name": "McLaren 765LT", "type": "Wheels", "image": "/rl-art/6752.webp"},
-    {"id": "mclaren-6752-5", "name": "McLaren 765LT", "type": "Wheels", "paint": "Crimson", "image": "/rl-art/6752.webp"},
-    {"id": "mclaren-6752-6", "name": "McLaren 765LT", "type": "Wheels", "paint": "Lime", "image": "/rl-art/6752.webp"},
-    {"id": "mclaren-6752-7", "name": "McLaren 765LT", "type": "Wheels", "paint": "Sky Blue", "image": "/rl-art/6752.webp"},
-    {"id": "mclaren-6752-8", "name": "McLaren 765LT", "type": "Wheels", "paint": "Cobalt", "image": "/rl-art/6752.webp"},
-    {"id": "mclaren-6752-9", "name": "McLaren 765LT", "type": "Wheels", "paint": "Burnt Sienna", "image": "/rl-art/6752.webp"},
-    {"id": "mclaren-6752-10", "name": "McLaren 765LT", "type": "Wheels", "paint": "Forest Green", "image": "/rl-art/6752.webp"},
-    {"id": "mclaren-6752-11", "name": "McLaren 765LT", "type": "Wheels", "paint": "Purple", "image": "/rl-art/6752.webp"},
-    {"id": "mclaren-6752-12", "name": "McLaren 765LT", "type": "Wheels", "paint": "Pink", "image": "/rl-art/6752.webp"},
-    {"id": "mclaren-6752-13", "name": "McLaren 765LT", "type": "Wheels", "paint": "Orange", "image": "/rl-art/6752.webp"},
-    {"id": "mclaren-6752-14", "name": "McLaren 765LT", "type": "Wheels", "paint": "Grey", "image": "/rl-art/6752.webp"},
-    {"id": "mclaren-6752-15", "name": "McLaren 765LT", "type": "Wheels", "paint": "Titanium White", "image": "/rl-art/6752.webp"},
-    {"id": "mclaren-6752-16", "name": "McLaren 765LT", "type": "Wheels", "paint": "Saffron", "image": "/rl-art/6752.webp"},
-    {"id": "mclaren-7015-17", "name": "McLaren 765LT (Black)", "type": "Wheels", "image": "/rl-art/7015.webp"},
+    {"id": "mclaren-6247-0", "name": "McLaren 765LT", "type": "Body", "image": "rl-art/6247.webp"},
+    {"id": "mclaren-6989-1", "name": "McLaren 765LT: McLaren 765 (Silver)", "type": "Decal", "image": "rl-art/6989.webp"},
+    {"id": "mclaren-12189-2", "name": "McLaren 765LT: GM08", "type": "Animated Decal", "image": "rl-art/12189.webp"},
+    {"id": "mclaren-12190-3", "name": "McLaren 765LT: TB3", "type": "Animated Decal", "image": "rl-art/12190.webp"},
+    {"id": "mclaren-6752-4", "name": "McLaren 765LT", "type": "Wheels", "image": "rl-art/6752.webp"},
+    {"id": "mclaren-6752-5", "name": "McLaren 765LT", "type": "Wheels", "paint": "Crimson", "image": "rl-art/6752.webp"},
+    {"id": "mclaren-6752-6", "name": "McLaren 765LT", "type": "Wheels", "paint": "Lime", "image": "rl-art/6752.webp"},
+    {"id": "mclaren-6752-7", "name": "McLaren 765LT", "type": "Wheels", "paint": "Sky Blue", "image": "rl-art/6752.webp"},
+    {"id": "mclaren-6752-8", "name": "McLaren 765LT", "type": "Wheels", "paint": "Cobalt", "image": "rl-art/6752.webp"},
+    {"id": "mclaren-6752-9", "name": "McLaren 765LT", "type": "Wheels", "paint": "Burnt Sienna", "image": "rl-art/6752.webp"},
+    {"id": "mclaren-6752-10", "name": "McLaren 765LT", "type": "Wheels", "paint": "Forest Green", "image": "rl-art/6752.webp"},
+    {"id": "mclaren-6752-11", "name": "McLaren 765LT", "type": "Wheels", "paint": "Purple", "image": "rl-art/6752.webp"},
+    {"id": "mclaren-6752-12", "name": "McLaren 765LT", "type": "Wheels", "paint": "Pink", "image": "rl-art/6752.webp"},
+    {"id": "mclaren-6752-13", "name": "McLaren 765LT", "type": "Wheels", "paint": "Orange", "image": "rl-art/6752.webp"},
+    {"id": "mclaren-6752-14", "name": "McLaren 765LT", "type": "Wheels", "paint": "Grey", "image": "rl-art/6752.webp"},
+    {"id": "mclaren-6752-15", "name": "McLaren 765LT", "type": "Wheels", "paint": "Titanium White", "image": "rl-art/6752.webp"},
+    {"id": "mclaren-6752-16", "name": "McLaren 765LT", "type": "Wheels", "paint": "Saffron", "image": "rl-art/6752.webp"},
+    {"id": "mclaren-7015-17", "name": "McLaren 765LT (Black)", "type": "Wheels", "image": "rl-art/7015.webp"},
   ],
   },
   {
@@ -359,7 +359,7 @@ export const demoItems = [
   "price": 2000,
   "visual": "✦",
   "endDate": NOW + 56*HOUR,
-  "image": "/rl-art/12049.webp",
+  "image": "rl-art/12049.webp",
   },
   {
   "id": "mclaren-12215",
@@ -370,7 +370,7 @@ export const demoItems = [
   "price": 700,
   "visual": "✦",
   "endDate": NOW + 56*HOUR,
-  "image": "/rl-art/12215.webp",
+  "image": "rl-art/12215.webp",
   },
   {
   "id": "mclaren-12167",
@@ -381,7 +381,7 @@ export const demoItems = [
   "price": 400,
   "visual": "✦",
   "endDate": NOW + 56*HOUR,
-  "image": "/rl-art/12167.webp",
+  "image": "rl-art/12167.webp",
   },
   {
   "id": "mclaren-12123",
@@ -392,7 +392,7 @@ export const demoItems = [
   "price": 400,
   "visual": "✦",
   "endDate": NOW + 56*HOUR,
-  "image": "/rl-art/12123.webp",
+  "image": "rl-art/12123.webp",
   },
   {
   "id": "mclaren-12278",
@@ -403,7 +403,7 @@ export const demoItems = [
   "price": 300,
   "visual": "✦",
   "endDate": NOW + 56*HOUR,
-  "image": "/rl-art/12278.webp",
+  "image": "rl-art/12278.webp",
   },
   {
   "id": "mclaren-12352",
@@ -414,7 +414,7 @@ export const demoItems = [
   "price": 300,
   "visual": "✦",
   "endDate": NOW + 56*HOUR,
-  "image": "/rl-art/12352.webp",
+  "image": "rl-art/12352.webp",
   },
   {
   "id": "mclaren-12371",
@@ -425,7 +425,7 @@ export const demoItems = [
   "price": 300,
   "visual": "✦",
   "endDate": NOW + 56*HOUR,
-  "image": "/rl-art/12371.webp",
+  "image": "rl-art/12371.webp",
   },
   {
   "id": "mclaren-12396",
@@ -436,7 +436,7 @@ export const demoItems = [
   "price": 300,
   "visual": "✦",
   "endDate": NOW + 56*HOUR,
-  "image": "/rl-art/12396.webp",
+  "image": "rl-art/12396.webp",
   },
   {
   "id": "mclaren-12371",
@@ -447,7 +447,7 @@ export const demoItems = [
   "price": 300,
   "visual": "✦",
   "endDate": NOW + 56*HOUR,
-  "image": "/rl-art/12371.webp",
+  "image": "rl-art/12371.webp",
   },
   {
   "id": "bundles-bundle-9024",
@@ -459,16 +459,16 @@ export const demoItems = [
   "bundle": true,
   "contents": [{"pid": "4284", "name": "Fennec", "type": "Body", "paint": "Sky Blue"}, {"pid": "9024", "name": "Hanami", "type": "Animated Decal", "paint": "Crimson"}, {"pid": "5975", "name": "Phoenix Cannon", "type": "Goal Explosion", "paint": "Sky Blue"}, {"pid": "11288", "name": "Hologlass", "type": "Goal Explosion", "paint": "Crimson"}, {"pid": "9805", "name": "Sweet Score", "type": "Goal Explosion", "paint": "Black"}, {"pid": "6019", "name": "Astro-CSX: Inverted", "type": "Wheels", "paint": "Sky Blue"}, {"pid": "1166", "name": "Frostbite", "type": "Rocket Boost", "paint": "Crimson"}, {"pid": "9850", "name": "Reheater", "type": "Trail", "paint": "Sky Blue"}],
   "endDate": NOW + 71*HOUR,
-  "image": "/rl-art/9024.webp",
+  "image": "rl-art/9024.webp",
   "contents": [
-    {"id": "bundles-4284-0", "name": "Fennec", "type": "Body", "paint": "Sky Blue", "image": "/rl-art/4284.webp"},
-    {"id": "bundles-9024-1", "name": "Hanami", "type": "Animated Decal", "paint": "Crimson", "image": "/rl-art/9024.webp"},
-    {"id": "bundles-5975-2", "name": "Phoenix Cannon", "type": "Goal Explosion", "paint": "Sky Blue", "image": "/rl-art/5975.webp"},
-    {"id": "bundles-11288-3", "name": "Hologlass", "type": "Goal Explosion", "paint": "Crimson", "image": "/rl-art/11288.webp"},
-    {"id": "bundles-9805-4", "name": "Sweet Score", "type": "Goal Explosion", "paint": "Black", "image": "/rl-art/9805.webp"},
-    {"id": "bundles-6019-5", "name": "Astro-CSX: Inverted", "type": "Wheels", "paint": "Sky Blue", "image": "/rl-art/6019.webp"},
-    {"id": "bundles-1166-6", "name": "Frostbite", "type": "Rocket Boost", "paint": "Crimson", "image": "/rl-art/1166.webp"},
-    {"id": "bundles-9850-7", "name": "Reheater", "type": "Trail", "paint": "Sky Blue", "image": "/rl-art/9850.webp"},
+    {"id": "bundles-4284-0", "name": "Fennec", "type": "Body", "paint": "Sky Blue", "image": "rl-art/4284.webp"},
+    {"id": "bundles-9024-1", "name": "Hanami", "type": "Animated Decal", "paint": "Crimson", "image": "rl-art/9024.webp"},
+    {"id": "bundles-5975-2", "name": "Phoenix Cannon", "type": "Goal Explosion", "paint": "Sky Blue", "image": "rl-art/5975.webp"},
+    {"id": "bundles-11288-3", "name": "Hologlass", "type": "Goal Explosion", "paint": "Crimson", "image": "rl-art/11288.webp"},
+    {"id": "bundles-9805-4", "name": "Sweet Score", "type": "Goal Explosion", "paint": "Black", "image": "rl-art/9805.webp"},
+    {"id": "bundles-6019-5", "name": "Astro-CSX: Inverted", "type": "Wheels", "paint": "Sky Blue", "image": "rl-art/6019.webp"},
+    {"id": "bundles-1166-6", "name": "Frostbite", "type": "Rocket Boost", "paint": "Crimson", "image": "rl-art/1166.webp"},
+    {"id": "bundles-9850-7", "name": "Reheater", "type": "Trail", "paint": "Sky Blue", "image": "rl-art/9850.webp"},
   ],
   },
   {
@@ -481,14 +481,14 @@ export const demoItems = [
   "bundle": true,
   "contents": [{"pid": "22", "name": "Breakout", "type": "Body", "paint": "Black"}, {"pid": "5266", "name": "Deep Six", "type": "Animated Decal", "paint": "Black"}, {"pid": "5287", "name": "Air Strike", "type": "Goal Explosion", "paint": "Black"}, {"pid": "11606", "name": "Dimensionator", "type": "Goal Explosion", "paint": "Black"}, {"pid": "2827", "name": "Hypnotik", "type": "Wheels", "paint": "Cobalt"}, {"pid": "5744", "name": "Ambustion", "type": "Rocket Boost", "paint": "Cobalt"}],
   "endDate": NOW + 71*HOUR,
-  "image": "/rl-art/5266.webp",
+  "image": "rl-art/5266.webp",
   "contents": [
-    {"id": "bundles-22-0", "name": "Breakout", "type": "Body", "paint": "Black", "image": "/rl-art/22.webp"},
-    {"id": "bundles-5266-1", "name": "Deep Six", "type": "Animated Decal", "paint": "Black", "image": "/rl-art/5266.webp"},
-    {"id": "bundles-5287-2", "name": "Air Strike", "type": "Goal Explosion", "paint": "Black", "image": "/rl-art/5287.webp"},
-    {"id": "bundles-11606-3", "name": "Dimensionator", "type": "Goal Explosion", "paint": "Black", "image": "/rl-art/11606.webp"},
-    {"id": "bundles-2827-4", "name": "Hypnotik", "type": "Wheels", "paint": "Cobalt", "image": "/rl-art/2827.webp"},
-    {"id": "bundles-5744-5", "name": "Ambustion", "type": "Rocket Boost", "paint": "Cobalt", "image": "/rl-art/5744.webp"},
+    {"id": "bundles-22-0", "name": "Breakout", "type": "Body", "paint": "Black", "image": "rl-art/22.webp"},
+    {"id": "bundles-5266-1", "name": "Deep Six", "type": "Animated Decal", "paint": "Black", "image": "rl-art/5266.webp"},
+    {"id": "bundles-5287-2", "name": "Air Strike", "type": "Goal Explosion", "paint": "Black", "image": "rl-art/5287.webp"},
+    {"id": "bundles-11606-3", "name": "Dimensionator", "type": "Goal Explosion", "paint": "Black", "image": "rl-art/11606.webp"},
+    {"id": "bundles-2827-4", "name": "Hypnotik", "type": "Wheels", "paint": "Cobalt", "image": "rl-art/2827.webp"},
+    {"id": "bundles-5744-5", "name": "Ambustion", "type": "Rocket Boost", "paint": "Cobalt", "image": "rl-art/5744.webp"},
   ],
   },
   {
@@ -501,14 +501,14 @@ export const demoItems = [
   "bundle": true,
   "contents": [{"pid": "1172", "name": "Marauder", "type": "Body", "paint": "Saffron"}, {"pid": "6092", "name": "Warp Wave", "type": "Animated Decal", "paint": "Saffron"}, {"pid": "1980", "name": "Pearlescent (Matte)", "type": "Paint Finish"}, {"pid": "8883", "name": "Mandala", "type": "Goal Explosion", "paint": "Saffron"}, {"pid": "4384", "name": "Creeper", "type": "Wheels", "paint": "Black"}, {"pid": "4241", "name": "Flamerate", "type": "Rocket Boost", "paint": "Saffron"}],
   "endDate": NOW + 71*HOUR,
-  "image": "/rl-art/1172.webp",
+  "image": "rl-art/1172.webp",
   "contents": [
-    {"id": "bundles-1172-0", "name": "Marauder", "type": "Body", "paint": "Saffron", "image": "/rl-art/1172.webp"},
-    {"id": "bundles-6092-1", "name": "Warp Wave", "type": "Animated Decal", "paint": "Saffron", "image": "/rl-art/6092.webp"},
-    {"id": "bundles-1980-2", "name": "Pearlescent (Matte)", "type": "Paint Finish", "image": "/rl-art/1980.webp"},
-    {"id": "bundles-8883-3", "name": "Mandala", "type": "Goal Explosion", "paint": "Saffron", "image": "/rl-art/8883.webp"},
-    {"id": "bundles-4384-4", "name": "Creeper", "type": "Wheels", "paint": "Black", "image": "/rl-art/4384.webp"},
-    {"id": "bundles-4241-5", "name": "Flamerate", "type": "Rocket Boost", "paint": "Saffron", "image": "/rl-art/4241.webp"},
+    {"id": "bundles-1172-0", "name": "Marauder", "type": "Body", "paint": "Saffron", "image": "rl-art/1172.webp"},
+    {"id": "bundles-6092-1", "name": "Warp Wave", "type": "Animated Decal", "paint": "Saffron", "image": "rl-art/6092.webp"},
+    {"id": "bundles-1980-2", "name": "Pearlescent (Matte)", "type": "Paint Finish", "image": "rl-art/1980.webp"},
+    {"id": "bundles-8883-3", "name": "Mandala", "type": "Goal Explosion", "paint": "Saffron", "image": "rl-art/8883.webp"},
+    {"id": "bundles-4384-4", "name": "Creeper", "type": "Wheels", "paint": "Black", "image": "rl-art/4384.webp"},
+    {"id": "bundles-4241-5", "name": "Flamerate", "type": "Rocket Boost", "paint": "Saffron", "image": "rl-art/4241.webp"},
   ],
   },
   {
@@ -521,12 +521,12 @@ export const demoItems = [
   "bundle": true,
   "contents": [{"pid": "1286", "name": "Aftershock", "type": "Body", "paint": "Titanium White"}, {"pid": "5127", "name": "Z-Current", "type": "Animated Decal", "paint": "Forest Green"}, {"pid": "10507", "name": "So-Low", "type": "Wheels", "paint": "Forest Green"}, {"pid": "1736", "name": "Neo-Thermal", "type": "Rocket Boost", "paint": "Forest Green"}],
   "endDate": NOW + 71*HOUR,
-  "image": "/rl-art/1286.webp",
+  "image": "rl-art/1286.webp",
   "contents": [
-    {"id": "bundles-1286-0", "name": "Aftershock", "type": "Body", "paint": "Titanium White", "image": "/rl-art/1286.webp"},
-    {"id": "bundles-5127-1", "name": "Z-Current", "type": "Animated Decal", "paint": "Forest Green", "image": "/rl-art/5127.webp"},
-    {"id": "bundles-10507-2", "name": "So-Low", "type": "Wheels", "paint": "Forest Green", "image": "/rl-art/10507.webp"},
-    {"id": "bundles-1736-3", "name": "Neo-Thermal", "type": "Rocket Boost", "paint": "Forest Green", "image": "/rl-art/1736.webp"},
+    {"id": "bundles-1286-0", "name": "Aftershock", "type": "Body", "paint": "Titanium White", "image": "rl-art/1286.webp"},
+    {"id": "bundles-5127-1", "name": "Z-Current", "type": "Animated Decal", "paint": "Forest Green", "image": "rl-art/5127.webp"},
+    {"id": "bundles-10507-2", "name": "So-Low", "type": "Wheels", "paint": "Forest Green", "image": "rl-art/10507.webp"},
+    {"id": "bundles-1736-3", "name": "Neo-Thermal", "type": "Rocket Boost", "paint": "Forest Green", "image": "rl-art/1736.webp"},
   ],
   },
   {
@@ -537,7 +537,7 @@ export const demoItems = [
   "rarity": "Limited",
   "price": 300,
   "visual": "✦",
-  "image": "/rl-art/12170.webp",
+  "image": "rl-art/12170.webp",
   },
   {
   "id": "rlcs-12170",
@@ -547,7 +547,7 @@ export const demoItems = [
   "rarity": "Limited",
   "price": 300,
   "visual": "✦",
-  "image": "/rl-art/12170.webp",
+  "image": "rl-art/12170.webp",
   },
   {
   "id": "rlcs-12170",
@@ -557,7 +557,7 @@ export const demoItems = [
   "rarity": "Limited",
   "price": 500,
   "visual": "✦",
-  "image": "/rl-art/12170.webp",
+  "image": "rl-art/12170.webp",
   },
   {
   "id": "rlcs-12184",
@@ -567,7 +567,7 @@ export const demoItems = [
   "rarity": "Limited",
   "price": 300,
   "visual": "✦",
-  "image": "/rl-art/12184.webp",
+  "image": "rl-art/12184.webp",
   },
   {
   "id": "rlcs-12184",
@@ -577,7 +577,7 @@ export const demoItems = [
   "rarity": "Limited",
   "price": 300,
   "visual": "✦",
-  "image": "/rl-art/12184.webp",
+  "image": "rl-art/12184.webp",
   },
   {
   "id": "rlcs-12184",
@@ -587,7 +587,7 @@ export const demoItems = [
   "rarity": "Limited",
   "price": 500,
   "visual": "✦",
-  "image": "/rl-art/12184.webp",
+  "image": "rl-art/12184.webp",
   },
   {
   "id": "rlcs-12191",
@@ -597,7 +597,7 @@ export const demoItems = [
   "rarity": "Limited",
   "price": 300,
   "visual": "✦",
-  "image": "/rl-art/12191.webp",
+  "image": "rl-art/12191.webp",
   },
   {
   "id": "rlcs-12191",
@@ -607,7 +607,7 @@ export const demoItems = [
   "rarity": "Limited",
   "price": 300,
   "visual": "✦",
-  "image": "/rl-art/12191.webp",
+  "image": "rl-art/12191.webp",
   },
   {
   "id": "rlcs-12498",
@@ -617,7 +617,7 @@ export const demoItems = [
   "rarity": "Limited",
   "price": 500,
   "visual": "✦",
-  "image": "/rl-art/12498.webp",
+  "image": "rl-art/12498.webp",
   },
   {
   "id": "rlcs-12174",
@@ -627,7 +627,7 @@ export const demoItems = [
   "rarity": "Limited",
   "price": 300,
   "visual": "✦",
-  "image": "/rl-art/12174.webp",
+  "image": "rl-art/12174.webp",
   },
   {
   "id": "rlcs-12174",
@@ -637,7 +637,7 @@ export const demoItems = [
   "rarity": "Limited",
   "price": 300,
   "visual": "✦",
-  "image": "/rl-art/12174.webp",
+  "image": "rl-art/12174.webp",
   },
   {
   "id": "rlcs-12417",
@@ -647,7 +647,7 @@ export const demoItems = [
   "rarity": "Limited",
   "price": 500,
   "visual": "✦",
-  "image": "/rl-art/12417.webp",
+  "image": "rl-art/12417.webp",
   },
   {
   "id": "rlcs-12183",
@@ -657,7 +657,7 @@ export const demoItems = [
   "rarity": "Limited",
   "price": 300,
   "visual": "✦",
-  "image": "/rl-art/12183.webp",
+  "image": "rl-art/12183.webp",
   },
   {
   "id": "rlcs-12183",
@@ -667,7 +667,7 @@ export const demoItems = [
   "rarity": "Limited",
   "price": 300,
   "visual": "✦",
-  "image": "/rl-art/12183.webp",
+  "image": "rl-art/12183.webp",
   },
   {
   "id": "rlcs-12183",
@@ -677,7 +677,7 @@ export const demoItems = [
   "rarity": "Limited",
   "price": 500,
   "visual": "✦",
-  "image": "/rl-art/12183.webp",
+  "image": "rl-art/12183.webp",
   },
   {
   "id": "rlcs-12168",
@@ -687,7 +687,7 @@ export const demoItems = [
   "rarity": "Limited",
   "price": 300,
   "visual": "✦",
-  "image": "/rl-art/12168.webp",
+  "image": "rl-art/12168.webp",
   },
   {
   "id": "rlcs-12168",
@@ -697,7 +697,7 @@ export const demoItems = [
   "rarity": "Limited",
   "price": 300,
   "visual": "✦",
-  "image": "/rl-art/12168.webp",
+  "image": "rl-art/12168.webp",
   },
   {
   "id": "rlcs-12168",
@@ -707,7 +707,7 @@ export const demoItems = [
   "rarity": "Limited",
   "price": 500,
   "visual": "✦",
-  "image": "/rl-art/12168.webp",
+  "image": "rl-art/12168.webp",
   },
   {
   "id": "rlcs-12175",
@@ -717,7 +717,7 @@ export const demoItems = [
   "rarity": "Limited",
   "price": 300,
   "visual": "✦",
-  "image": "/rl-art/12175.webp",
+  "image": "rl-art/12175.webp",
   },
   {
   "id": "rlcs-12175",
@@ -727,7 +727,7 @@ export const demoItems = [
   "rarity": "Limited",
   "price": 300,
   "visual": "✦",
-  "image": "/rl-art/12175.webp",
+  "image": "rl-art/12175.webp",
   },
   {
   "id": "rlcs-12545",
@@ -737,7 +737,7 @@ export const demoItems = [
   "rarity": "Limited",
   "price": 500,
   "visual": "✦",
-  "image": "/rl-art/12545.webp",
+  "image": "rl-art/12545.webp",
   },
   {
   "id": "rlcs-12171",
@@ -747,7 +747,7 @@ export const demoItems = [
   "rarity": "Limited",
   "price": 300,
   "visual": "✦",
-  "image": "/rl-art/12171.webp",
+  "image": "rl-art/12171.webp",
   },
   {
   "id": "rlcs-12171",
@@ -757,7 +757,7 @@ export const demoItems = [
   "rarity": "Limited",
   "price": 300,
   "visual": "✦",
-  "image": "/rl-art/12171.webp",
+  "image": "rl-art/12171.webp",
   },
   {
   "id": "rlcs-12171",
@@ -767,7 +767,7 @@ export const demoItems = [
   "rarity": "Limited",
   "price": 500,
   "visual": "✦",
-  "image": "/rl-art/12171.webp",
+  "image": "rl-art/12171.webp",
   },
   {
   "id": "rlcs-12176",
@@ -777,7 +777,7 @@ export const demoItems = [
   "rarity": "Limited",
   "price": 300,
   "visual": "✦",
-  "image": "/rl-art/12176.webp",
+  "image": "rl-art/12176.webp",
   },
   {
   "id": "rlcs-12176",
@@ -787,7 +787,7 @@ export const demoItems = [
   "rarity": "Limited",
   "price": 300,
   "visual": "✦",
-  "image": "/rl-art/12176.webp",
+  "image": "rl-art/12176.webp",
   },
   {
   "id": "rlcs-12504",
@@ -797,7 +797,7 @@ export const demoItems = [
   "rarity": "Limited",
   "price": 500,
   "visual": "✦",
-  "image": "/rl-art/12504.webp",
+  "image": "rl-art/12504.webp",
   },
   {
   "id": "rlcs-12169",
@@ -807,7 +807,7 @@ export const demoItems = [
   "rarity": "Limited",
   "price": 300,
   "visual": "✦",
-  "image": "/rl-art/12169.webp",
+  "image": "rl-art/12169.webp",
   },
   {
   "id": "rlcs-12169",
@@ -817,7 +817,7 @@ export const demoItems = [
   "rarity": "Limited",
   "price": 300,
   "visual": "✦",
-  "image": "/rl-art/12169.webp",
+  "image": "rl-art/12169.webp",
   },
   {
   "id": "rlcs-12505",
@@ -827,7 +827,7 @@ export const demoItems = [
   "rarity": "Limited",
   "price": 500,
   "visual": "✦",
-  "image": "/rl-art/12505.webp",
+  "image": "rl-art/12505.webp",
   },
   {
   "id": "rlcs-12179",
@@ -837,7 +837,7 @@ export const demoItems = [
   "rarity": "Limited",
   "price": 300,
   "visual": "✦",
-  "image": "/rl-art/12179.webp",
+  "image": "rl-art/12179.webp",
   },
   {
   "id": "rlcs-12179",
@@ -847,7 +847,7 @@ export const demoItems = [
   "rarity": "Limited",
   "price": 300,
   "visual": "✦",
-  "image": "/rl-art/12179.webp",
+  "image": "rl-art/12179.webp",
   },
   {
   "id": "rlcs-12179",
@@ -857,7 +857,7 @@ export const demoItems = [
   "rarity": "Limited",
   "price": 500,
   "visual": "✦",
-  "image": "/rl-art/12179.webp",
+  "image": "rl-art/12179.webp",
   },
   {
   "id": "rlcs-12194",
@@ -867,7 +867,7 @@ export const demoItems = [
   "rarity": "Limited",
   "price": 300,
   "visual": "✦",
-  "image": "/rl-art/12194.webp",
+  "image": "rl-art/12194.webp",
   },
   {
   "id": "rlcs-12194",
@@ -877,7 +877,7 @@ export const demoItems = [
   "rarity": "Limited",
   "price": 300,
   "visual": "✦",
-  "image": "/rl-art/12194.webp",
+  "image": "rl-art/12194.webp",
   },
   {
   "id": "rlcs-12507",
@@ -887,7 +887,7 @@ export const demoItems = [
   "rarity": "Limited",
   "price": 500,
   "visual": "✦",
-  "image": "/rl-art/12507.webp",
+  "image": "rl-art/12507.webp",
   },
   {
   "id": "rlcs-12180",
@@ -897,7 +897,7 @@ export const demoItems = [
   "rarity": "Limited",
   "price": 300,
   "visual": "✦",
-  "image": "/rl-art/12180.webp",
+  "image": "rl-art/12180.webp",
   },
   {
   "id": "rlcs-12180",
@@ -907,7 +907,7 @@ export const demoItems = [
   "rarity": "Limited",
   "price": 300,
   "visual": "✦",
-  "image": "/rl-art/12180.webp",
+  "image": "rl-art/12180.webp",
   },
   {
   "id": "rlcs-12180",
@@ -917,7 +917,7 @@ export const demoItems = [
   "rarity": "Limited",
   "price": 500,
   "visual": "✦",
-  "image": "/rl-art/12180.webp",
+  "image": "rl-art/12180.webp",
   },
   {
   "id": "rlcs-12496",
@@ -927,7 +927,7 @@ export const demoItems = [
   "rarity": "Limited",
   "price": 300,
   "visual": "✦",
-  "image": "/rl-art/12496.webp",
+  "image": "rl-art/12496.webp",
   },
   {
   "id": "rlcs-12196",
@@ -937,7 +937,7 @@ export const demoItems = [
   "rarity": "Limited",
   "price": 300,
   "visual": "✦",
-  "image": "/rl-art/12196.webp",
+  "image": "rl-art/12196.webp",
   },
   {
   "id": "rlcs-12496",
@@ -947,7 +947,7 @@ export const demoItems = [
   "rarity": "Limited",
   "price": 500,
   "visual": "✦",
-  "image": "/rl-art/12496.webp",
+  "image": "rl-art/12496.webp",
   },
   {
   "id": "rlcs-12188",
@@ -957,7 +957,7 @@ export const demoItems = [
   "rarity": "Limited",
   "price": 300,
   "visual": "✦",
-  "image": "/rl-art/12188.webp",
+  "image": "rl-art/12188.webp",
   },
   {
   "id": "rlcs-12188",
@@ -967,7 +967,7 @@ export const demoItems = [
   "rarity": "Limited",
   "price": 300,
   "visual": "✦",
-  "image": "/rl-art/12188.webp",
+  "image": "rl-art/12188.webp",
   },
   {
   "id": "rlcs-12188",
@@ -977,7 +977,7 @@ export const demoItems = [
   "rarity": "Limited",
   "price": 500,
   "visual": "✦",
-  "image": "/rl-art/12188.webp",
+  "image": "rl-art/12188.webp",
   },
   {
   "id": "rlcs-12177",
@@ -987,7 +987,7 @@ export const demoItems = [
   "rarity": "Limited",
   "price": 300,
   "visual": "✦",
-  "image": "/rl-art/12177.webp",
+  "image": "rl-art/12177.webp",
   },
   {
   "id": "rlcs-12177",
@@ -997,7 +997,7 @@ export const demoItems = [
   "rarity": "Limited",
   "price": 300,
   "visual": "✦",
-  "image": "/rl-art/12177.webp",
+  "image": "rl-art/12177.webp",
   },
   {
   "id": "rlcs-12546",
@@ -1007,7 +1007,7 @@ export const demoItems = [
   "rarity": "Limited",
   "price": 500,
   "visual": "✦",
-  "image": "/rl-art/12546.webp",
+  "image": "rl-art/12546.webp",
   },
   {
   "id": "rlcs-12219",
@@ -1017,7 +1017,7 @@ export const demoItems = [
   "rarity": "Limited",
   "price": 300,
   "visual": "✦",
-  "image": "/rl-art/12219.webp",
+  "image": "rl-art/12219.webp",
   },
   {
   "id": "rlcs-12219",
@@ -1027,7 +1027,7 @@ export const demoItems = [
   "rarity": "Limited",
   "price": 300,
   "visual": "✦",
-  "image": "/rl-art/12219.webp",
+  "image": "rl-art/12219.webp",
   },
   {
   "id": "rlcs-12509",
@@ -1037,7 +1037,7 @@ export const demoItems = [
   "rarity": "Limited",
   "price": 500,
   "visual": "✦",
-  "image": "/rl-art/12509.webp",
+  "image": "rl-art/12509.webp",
   },
   {
   "id": "rlcs-12172",
@@ -1047,7 +1047,7 @@ export const demoItems = [
   "rarity": "Limited",
   "price": 300,
   "visual": "✦",
-  "image": "/rl-art/12172.webp",
+  "image": "rl-art/12172.webp",
   },
   {
   "id": "rlcs-12172",
@@ -1057,7 +1057,7 @@ export const demoItems = [
   "rarity": "Limited",
   "price": 300,
   "visual": "✦",
-  "image": "/rl-art/12172.webp",
+  "image": "rl-art/12172.webp",
   },
   {
   "id": "rlcs-12512",
@@ -1067,7 +1067,7 @@ export const demoItems = [
   "rarity": "Limited",
   "price": 500,
   "visual": "✦",
-  "image": "/rl-art/12512.webp",
+  "image": "rl-art/12512.webp",
   },
   {
   "id": "rlcs-12718",
@@ -1077,7 +1077,7 @@ export const demoItems = [
   "rarity": "Limited",
   "price": 300,
   "visual": "✦",
-  "image": "/rl-art/12718.webp",
+  "image": "rl-art/12718.webp",
   },
   {
   "id": "rlcs-12579",
@@ -1087,7 +1087,7 @@ export const demoItems = [
   "rarity": "Limited",
   "price": 500,
   "visual": "✦",
-  "image": "/rl-art/12579.webp",
+  "image": "rl-art/12579.webp",
   },
   {
   "id": "rlcs-12693",
@@ -1097,7 +1097,7 @@ export const demoItems = [
   "rarity": "Limited",
   "price": 300,
   "visual": "✦",
-  "image": "/rl-art/12693.webp",
+  "image": "rl-art/12693.webp",
   },
   {
   "id": "rlcs-12199",
@@ -1107,7 +1107,7 @@ export const demoItems = [
   "rarity": "Limited",
   "price": 300,
   "visual": "✦",
-  "image": "/rl-art/12199.webp",
+  "image": "rl-art/12199.webp",
   },
   {
   "id": "rlcs-12503",
@@ -1117,7 +1117,7 @@ export const demoItems = [
   "rarity": "Limited",
   "price": 500,
   "visual": "✦",
-  "image": "/rl-art/12503.webp",
+  "image": "rl-art/12503.webp",
   },
   {
   "id": "rlcs-12711",
@@ -1127,7 +1127,7 @@ export const demoItems = [
   "rarity": "Limited",
   "price": 300,
   "visual": "✦",
-  "image": "/rl-art/12711.webp",
+  "image": "rl-art/12711.webp",
   },
   {
   "id": "rlcs-12711",
@@ -1137,7 +1137,7 @@ export const demoItems = [
   "rarity": "Limited",
   "price": 500,
   "visual": "✦",
-  "image": "/rl-art/12711.webp",
+  "image": "rl-art/12711.webp",
   },
 ];
 

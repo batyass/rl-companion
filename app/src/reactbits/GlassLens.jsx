@@ -139,7 +139,7 @@ export function PageBackdrop({ canvasRef, version }) {
 
 export function GlassLens({ sizePx = 150, lensProps = {}, posRef, canvasRef, version }) {
   const ref = useRef();
-  const { nodes } = useGLTF("/assets/3d/lens.glb");
+  const { nodes } = useGLTF("assets/3d/lens.glb");
   const buffer = useFBO();
   const { viewport } = useThree();
   const [scene] = useState(() => new THREE.Scene());
