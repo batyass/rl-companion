@@ -97,6 +97,9 @@ button:active {
   inset: 0;
   z-index: -1;
   pointer-events: none;
+  /* Promote to its own compositor layer so scrolling never re-composites it. */
+  transform: translateZ(0);
+  backface-visibility: hidden;
 }
 
 .beams-bg canvas {
@@ -399,8 +402,17 @@ button:active {
 }
 
 .tab-glyph {
-  font-size: 18px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
   line-height: 1;
+}
+
+.tab-glyph svg {
+  width: 20px;
+  height: 20px;
 }
 
 .tab-label {
@@ -724,6 +736,10 @@ button:active {
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
   transition: transform 160ms ease-out, border-color 160ms ease-out, box-shadow 160ms ease-out;
   overflow: hidden;
+  /* Off-screen cards skip layout/paint entirely while scrolling — the biggest
+     scroll win since each card carries an expensive backdrop blur. */
+  content-visibility: auto;
+  contain-intrinsic-size: auto 320px;
 }
 
 .item-card:hover {
@@ -908,6 +924,7 @@ button:active {
   backdrop-filter: blur(10px) saturate(1.4);
   -webkit-backdrop-filter: blur(10px) saturate(1.4);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  contain: layout paint style;
 }
 
 .bundle-heading {
@@ -1144,18 +1161,78 @@ button:active {
   }
   .main-content {
     margin-left: 0 !important;
-    padding: 16px;
-    padding-bottom: 80px;
+    padding: 20px 16px;
+    padding-bottom: 96px;
   }
   .topbar { display: flex; }
   .bottom-bar { display: flex; }
   .modal-dialog { flex-direction: column; }
   .modal-art-panel { min-height: 200px; }
+
+  /* Hero compacts into a scannable stack */
+  .hero-card { margin-bottom: 20px; }
+  .hero-title { font-size: 30px; }
+  .hero-subtext { font-size: 14px; line-height: 1.45; }
+  .hero-cta-row { margin-top: 16px; }
+  .hero-meta { flex-wrap: wrap; margin-top: 16px; }
+  .hero-stats { gap: 18px; margin-top: 16px; }
+  .hero-stat strong { font-size: 24px; }
+
+  /* Search + filter stack full-width */
+  .toolbar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+    margin-top: 16px;
+    margin-bottom: 18px;
+  }
+  .search-wrap { max-width: none; width: 100%; height: 44px; }
+  .filter-specular-main { width: 100%; height: 44px; }
+
+  /* Filter dropdowns go full-width and stack */
+  .filter-panel-glass .glass-surface__content {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+    padding: 14px;
+  }
+  .filter-select-wrap { width: 100%; }
+  .filter-select-wrap .filter-specular {
+    width: 100%;
+    justify-content: center;
+  }
+
+  /* Bundle headings wrap cleanly */
+  .bundle-heading { flex-wrap: wrap; gap: 8px; }
 }
 
 @media (max-width: 600px) {
-  .item-grid { grid-template-columns: repeat(2, 1fr); }
-  .content-grid { grid-template-columns: repeat(2, 1fr); }
+  .item-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  .content-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+}
+
+@media (max-width: 480px) {
+  .hero-title { font-size: 26px; }
+  .hero-cta-row { flex-direction: column; }
+  .pill-glass.pill-primary,
+  .pill-glass.pill-ghost { width: 100%; }
+  .pill-glass .glass-surface__content { width: 100%; padding: 9px 18px; }
+
+  /* Stats become a tight 3-up readout */
+  .hero-stats { gap: 12px; }
+  .hero-stat strong { font-size: 22px; }
+  .hero-stat .stat-label { font-size: 9.5px; letter-spacing: 0.05em; }
+
+  /* Cards tighten so two fit comfortably */
+  .item-card { padding: 10px; gap: 9px; }
+  .item-name { font-size: 13px; }
+  .item-type { font-size: 11px; }
+  .paint-chip { font-size: 10px; padding: 2px 7px; }
+  .time-chip { font-size: 10px; padding: 2px 6px; }
+
+  /* Keep the topbar minimal on small phones */
+  .credits-badge { padding: 5px 9px; }
+  .credits-badge span { display: none; }
 }
 
 /* Accessibility Overrides */
@@ -1512,13 +1589,22 @@ button:active {
 /* ── Companion chat widget (iMessage / WhatsApp) ────────────── */
 .companion-widget {
   position: fixed;
-  right: 22px;
-  bottom: 86px;
+  inset: 0;
   z-index: 60;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 12px;
+  pointer-events: none;
+}
+
+.companion-panel {
+  position: fixed;
+  width: 300px;
+  background: var(--glass-panel);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius);
+  padding: 16px;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  box-shadow: var(--shadow-lg);
+  pointer-events: auto;
 }
 
 .companion-fab {
@@ -1620,10 +1706,6 @@ button:active {
 .companion-option.whatsapp { color: var(--orange); }
 
 @media (max-width: 720px) {
-  .companion-widget {
-    right: 14px;
-    bottom: 76px;
-  }
   .companion-panel {
     width: min(300px, calc(100vw - 56px));
   }
@@ -1658,3 +1740,94 @@ button:active {
   font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
+
+/* ── Glass lens toggle (top-right, fixed) ─────────────────── */
+.glass-cursor-toggle {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 60;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 7px 12px 7px 14px;
+  border-radius: 999px;
+  background: rgba(18, 23, 33, 0.55);
+  -webkit-backdrop-filter: blur(20px) saturate(170%);
+  backdrop-filter: blur(20px) saturate(170%);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 10px 30px rgba(0, 0, 0, 0.45);
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-2);
+  -webkit-font-smoothing: antialiased;
+  user-select: none;
+}
+
+.glass-cursor-toggle .toggle-icon {
+  display: flex;
+  align-items: center;
+  color: var(--accent);
+}
+
+.glass-cursor-toggle .toggle-label {
+  white-space: nowrap;
+}
+
+/* The switch itself — a pill track with a glass thumb. */
+.rl-switch {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  width: 40px;
+  height: 23px;
+  padding: 3px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  -webkit-backdrop-filter: blur(10px) saturate(150%);
+  backdrop-filter: blur(10px) saturate(150%);
+  cursor: pointer;
+  outline: none;
+  transition: background 220ms var(--ease-out), border-color 220ms var(--ease-out), box-shadow 220ms var(--ease-out);
+}
+
+.rl-switch[data-checked] {
+  background: rgba(0, 163, 255, 0.20);
+  border-color: rgba(0, 163, 255, 0.55);
+  box-shadow: 0 0 16px rgba(0, 163, 255, 0.35), inset 0 0 10px rgba(0, 163, 255, 0.28);
+}
+
+.rl-switch:focus-visible {
+  outline: 2px solid var(--accent-line);
+  outline-offset: 2px;
+}
+
+.rl-switch-thumb {
+  display: block;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  background: #ffffff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.55), 0 0 0 0.5px rgba(0, 0, 0, 0.15);
+  transition: transform 220ms var(--ease-spring), box-shadow 220ms var(--ease-out);
+  transform: translateX(0);
+}
+
+.rl-switch[data-checked] .rl-switch-thumb {
+  transform: translateX(17px);
+  box-shadow: 0 0 8px rgba(0, 163, 255, 0.65), 0 1px 3px rgba(0, 0, 0, 0.45);
+}
+
+/* On small screens the toggle tucks tighter so it never covers the content. */
+@media (max-width: 600px) {
+  .glass-cursor-toggle {
+    top: 12px;
+    right: 12px;
+    gap: 8px;
+    padding: 6px 10px 6px 12px;
+  }
+  .glass-cursor-toggle .toggle-label { display: none; }
+}

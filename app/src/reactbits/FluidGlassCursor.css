@@ -1,0 +1,15 @@
+/* Full-viewport transparent layer for the cursor-following fluid glass lens.
+   It must not intercept any clicks — the lens is purely a visual overlay. */
+
+.fluid-glass-cursor {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+}
+
+.fluid-glass-cursor canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}

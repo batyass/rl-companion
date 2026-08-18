@@ -5,6 +5,9 @@
   justify-content: center;
   overflow: hidden;
   transition: opacity 0.26s ease-out;
+  /* Clip the backdrop blur to this element's bounds and isolate its repaint
+     so scrolling doesn't invalidate the whole page. Visual output unchanged. */
+  contain: layout paint style;
 }
 
 .glass-surface__filter {

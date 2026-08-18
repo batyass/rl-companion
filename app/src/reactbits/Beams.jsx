@@ -1,5 +1,5 @@
 /* eslint-disable react/no-unknown-property */
-import { forwardRef, useImperativeHandle, useEffect, useRef, useMemo } from 'react';
+import { forwardRef, useImperativeHandle, useEffect, useRef, useMemo, useState } from 'react';
 
 import * as THREE from 'three';
 
@@ -50,11 +50,32 @@ function extendMaterial(BaseMaterial, cfg) {
   return mat;
 }
 
-const CanvasWrapper = ({ children }) => (
-  <Canvas dpr={[1, 2]} frameloop="always" className="beams-container">
-    {children}
-  </Canvas>
-);
+// Pause the render loop entirely when the tab is backgrounded so the animated
+// background stops burning CPU/GPU while the user is elsewhere.
+function usePageVisibility() {
+  const [hidden, setHidden] = useState(false);
+  useEffect(() => {
+    const update = () => setHidden(document.hidden);
+    update();
+    document.addEventListener('visibilitychange', update);
+    return () => document.removeEventListener('visibilitychange', update);
+  }, []);
+  return hidden;
+}
+
+const CanvasWrapper = ({ children }) => {
+  const hidden = usePageVisibility();
+  return (
+    <Canvas
+      dpr={[1, 1.5]}
+      frameloop={hidden ? 'never' : 'always'}
+      gl={{ powerPreference: 'high-performance', antialias: false }}
+      className="beams-container"
+    >
+      {children}
+    </Canvas>
+  );
+};
 
 const hexToNormalizedRGB = hex => {
   const clean = hex.replace('#', '');

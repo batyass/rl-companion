@@ -12,8 +12,19 @@ import {
 import GlassSurface from "./reactbits/GlassSurface.jsx";
 import SpecularButton from "./reactbits/SpecularButton.jsx";
 import Counter from "./reactbits/Counter.jsx";
-import Beams from "./reactbits/Beams.jsx";
+
+// The three.js beams background is the heaviest dependency (three + fiber + drei).
+// Load it lazily so the main bundle stays light and the app paints instantly;
+// the fixed black `html` background covers the gap until it mounts.
+const Beams = React.lazy(() => import("./reactbits/Beams.jsx"));
+// The fluid-glass chat FAB is also three.js-heavy, so it loads lazily too.
+const FluidGlass = React.lazy(() => import("./reactbits/FluidGlass.jsx"));
+// Cursor-following fluid glass lens (React Bits lens mode) — used to compare
+// the real WebGL ior refraction against the chat FAB.
+const FluidGlassCursor = React.lazy(() => import("./reactbits/FluidGlassCursor.jsx"));
 import { Select, SelectTrigger, SelectValue, SelectPortal, SelectPositioner, SelectPopup, SelectItem } from "./components/ui/select.jsx";
+import { Switch } from "./components/ui/switch.jsx";
+import { Sparkles } from "lucide-react";
 import Sidebar from "./components/Sidebar.jsx";
 import BottomBar from "./components/BottomBar.jsx";
 
@@ -168,10 +179,25 @@ function ActivityMarquee({ items }) {
 
 function CompanionWidget() {
   const [open, setOpen] = useState(false);
+  const [fabPos, setFabPos] = useState(null);
+
+  const toggle = () => setOpen((v) => !v);
+
+  // Anchor the chat panel just above the FAB, clamped to the viewport so it
+  // never flies off-screen after the FAB is dragged somewhere unusual.
+  const fabR = fabPos?.r ?? 27;
+  const panelStyle = fabPos
+    ? {
+        right: Math.max(14, window.innerWidth - fabPos.x - fabR),
+        bottom: Math.max(14, window.innerHeight - fabPos.y + fabR + 12),
+        maxWidth: `min(300px, calc(100vw - 28px))`,
+      }
+    : undefined;
+
   return (
     <div className={`companion-widget ${open ? "open" : ""}`}>
       {open && (
-        <div className="companion-panel">
+        <div className="companion-panel" style={panelStyle}>
           <div className="companion-head">
             <span className="live-chip"><span className="live-dot" />Companion online</span>
             <button className="modal-close-btn" onClick={() => setOpen(false)} aria-label="Close chat">✕</button>
@@ -191,14 +217,32 @@ function CompanionWidget() {
           </div>
         </div>
       )}
-      <button
-        className="companion-fab"
-        onClick={() => setOpen((v) => !v)}
-        aria-label={open ? "Close companion chat" : "Open companion chat"}
-        aria-expanded={open}
-      >
-        {open ? "✕" : <MessageIcon kind="chat" />}
-      </button>
+      {supportsWebGL ? (
+        <React.Suspense fallback={null}>
+          <FluidGlass
+            open={open}
+            onToggle={toggle}
+            onPosChange={setFabPos}
+            lensProps={{
+              ior: 1.15,
+              thickness: 1,
+              chromaticAberration: 0.05,
+              anisotropy: 0.01,
+            }}
+          >
+            {open ? "✕" : <MessageIcon kind="chat" />}
+          </FluidGlass>
+        </React.Suspense>
+      ) : (
+        <button
+          className="companion-fab"
+          onClick={toggle}
+          aria-label={open ? "Close companion chat" : "Open companion chat"}
+          aria-expanded={open}
+        >
+          {open ? "✕" : <MessageIcon kind="chat" />}
+        </button>
+      )}
     </div>
   );
 }
@@ -298,6 +342,8 @@ function ItemArt({ item, className }) {
       alt={item.name}
       className={className || "item-art"}
       loading="lazy"
+      decoding="async"
+      fetchpriority="low"
       onError={() => setFailed(true)}
     />
   );
@@ -478,7 +524,21 @@ export default function App() {
   });
   const [toast, setToast] = useState(null);
   const [now, setNow] = useState(Date.now());
+  const [glassCursor, setGlassCursor] = useState(true);
   const searchInputRef = useRef(null);
+
+  // Press "g" to toggle the cursor-following fluid glass lens for comparison.
+  useEffect(() => {
+    const onKey = (e) => {
+      if (e.key.toLowerCase() === "g" && !e.ctrlKey && !e.metaKey && !e.altKey) {
+        const tag = document.activeElement?.tagName;
+        if (tag === "INPUT" || tag === "TEXTAREA") return;
+        setGlassCursor((v) => !v);
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, []);
 
   useEffect(() => {
     const timer = setInterval(() => setNow(Date.now()), 1000);
@@ -635,16 +695,18 @@ export default function App() {
     <div className={`app-layout ${sidebarCollapsed ? "sidebar-collapsed" : ""}`}>
       <div className="beams-bg" aria-hidden="true">
         {supportsWebGL ? (
-          <Beams
-            beamWidth={2}
-            beamHeight={15}
-            beamNumber={12}
-            lightColor="#00A3FF"
-            speed={2}
-            noiseIntensity={1.75}
-            scale={0.2}
-            rotation={0}
-          />
+          <React.Suspense fallback={null}>
+            <Beams
+              beamWidth={2}
+              beamHeight={15}
+              beamNumber={12}
+              lightColor="#00A3FF"
+              speed={2}
+              noiseIntensity={1.75}
+              scale={0.2}
+              rotation={0}
+            />
+          </React.Suspense>
         ) : null}
       </div>
       <header className="topbar">
@@ -1015,6 +1077,25 @@ export default function App() {
           onToggleFavorite={toggleFavorite}
         />
       )}
+
+      {supportsWebGL && (
+        <React.Suspense fallback={null}>
+          <FluidGlassCursor
+            enabled={glassCursor}
+            lensProps={{ ior: 1.15, thickness: 2, chromaticAberration: 0.05, anisotropy: 0.01 }}
+          />
+        </React.Suspense>
+      )}
+
+      <div className="glass-cursor-toggle">
+        <span className="toggle-icon" aria-hidden="true"><Sparkles size={15} strokeWidth={1.75} /></span>
+        <span className="toggle-label">Glass lens</span>
+        <Switch
+          checked={glassCursor}
+          onCheckedChange={(checked) => setGlassCursor(checked)}
+          aria-label="Toggle cursor fluid glass"
+        />
+      </div>
 
       <CompanionWidget />
 
