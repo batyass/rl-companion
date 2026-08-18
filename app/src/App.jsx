@@ -568,17 +568,23 @@ export default function App() {
   // minutes and hot-swaps the items when a newer file lands — no reload.
   const lastGeneratedRef = useRef(null);
   const loadLiveItems = useCallback(async () => {
-    try {
-      const res = await fetch("/api/shop", { cache: "no-store" });
-      if (!res.ok) return;
-      const data = await res.json();
-      if (!data || !Array.isArray(data.items) || data.items.length === 0) return;
-      const generated = data.generatedAt ?? 0;
-      if (lastGeneratedRef.current === generated) return;
-      lastGeneratedRef.current = generated;
-      setItems(withUniqueIds(data.items));
-    } catch {
-      /* offline or no backend — keep whatever is on screen */
+    // Live API first (dev / self-hosted), then the baked static snapshot
+    // (GitHub Pages and other static hosts), then the bundled demo seed.
+    const sources = ["/api/shop", "shop.json"];
+    for (const source of sources) {
+      try {
+        const res = await fetch(source, { cache: "no-store" });
+        if (!res.ok) continue;
+        const data = await res.json();
+        if (!data || !Array.isArray(data.items) || data.items.length === 0) continue;
+        const generated = data.generatedAt ?? 0;
+        if (lastGeneratedRef.current === generated) return;
+        lastGeneratedRef.current = generated;
+        setItems(withUniqueIds(data.items));
+        return;
+      } catch {
+        /* try the next source */
+      }
     }
   }, []);
 

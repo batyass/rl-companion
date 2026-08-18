@@ -8,14 +8,6 @@ Built around a **liquid-glass** design language (React Bits `GlassSurface`,
 `Beams`, `FluidGlass`, `SpecularButton`, `Counter`) on top of React + Three.js,
 with real shop data fetched from Rocket League's own internal API.
 
-<p align="center">
-  <img src="docs/screenshots/desktop.png" alt="RL Companion desktop" width="840" />
-</p>
-
-<p align="center">
-  <img src="docs/screenshots/mobile.png" alt="RL Companion mobile" width="260" />
-</p>
-
 ---
 
 ## Features
@@ -68,8 +60,7 @@ with real shop data fetched from Rocket League's own internal API.
 │   └── vite.config.js
 ├── tools/fetch-shop/        # Go + Python data pipeline (RL internal API → shop.json)
 ├── data/                    # fallback demo data + item art index
-├── server.js                # tiny production server (serves app/dist + /api/shop)
-└── docs/screenshots/        # README screenshots
+└── server.js                # tiny production server (serves app/dist + /api/shop)
 ```
 
 ## Getting started
@@ -130,28 +121,32 @@ refreshes itself daily with **no cron and no manual steps**.
 
 ## GitHub Pages
 
-The app ships with a GitHub Actions workflow (`.github/workflows/deploy.yml`)
-that builds `app/` with the correct base path and publishes it to GitHub Pages
-on every push to `main`.
+The site is published to GitHub Pages from a **`gh-pages` branch** (the classic
+"deploy from a branch" method) — no Actions workflow or `workflow` token scope
+needed.
 
-**Publish link:** <https://github.com/batyass/rl-companion/settings/pages>
+**Live URL:** <https://batyass.github.io/rl-companion/>
 
-One-time setup:
+To (re)publish:
 
-1. Open the link above (or go to **Settings → Pages**).
-2. Under **Build and deployment → Source**, select **GitHub Actions**.
-3. Push to `main` — the workflow runs and deploys automatically.
+```bash
+./tools/deploy-pages.sh
+```
 
-The site will then be live at:
+This bakes the latest fetched shop data + item art into the build, builds `app/`
+at the `/rl-companion/` base, and force-pushes the result to the `gh-pages`
+branch. GitHub Pages rebuilds automatically from that branch.
 
-> <https://batyass.github.io/rl-companion/>
+One-time setup (already done): in **Settings → Pages**, set **Build and
+deployment → Source → Deploy from a branch → `gh-pages` → `/ (root)`**.
 
 ### Static-hosting caveat
 
-GitHub Pages is static, so there is no `/api/shop` backend. On Pages the app
-falls back to the bundled **demo seed** (`app/src/data.js`) with its included
-artwork — everything works, but the rotation is a snapshot rather than the live
-shop. For live data, run the dev server or `node server.js`.
+Pages is a **snapshot**, not the live API. `deploy-pages.sh` bakes the current
+`tools/fetch-shop/out/shop.json` into the site, so each deploy shows the shop as
+of deploy time — it does **not** auto-refresh daily. Re-run
+`./tools/deploy-pages.sh` to publish a new rotation. Per-day live updates happen
+on the dev server / `node server.js`, where `/api/shop` is served directly.
 
 ## Disclaimer
 

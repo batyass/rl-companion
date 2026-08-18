@@ -4,6 +4,10 @@ node_modules/
 # build output
 dist/
 
+# Pages bake (regenerate with tools/deploy-pages.sh)
+app/public/shop.json
+app/public/shop-img/
+
 # local app state / tooling
 .freebuff/
 .zcode/
