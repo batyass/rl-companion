@@ -53,11 +53,14 @@ with real shop data fetched from Rocket League's own internal API.
 ├── app/                     # React + Vite frontend
 │   ├── public/
 │   │   ├── rl-art/          # item artwork (webp)
-│   │   └── assets/3d/       # fluid-glass lens GLB models
+│   │   ├── assets/3d/       # fluid-glass lens GLB models
+│   │   ├── icons/, splash/  # PWA icons + iOS launch screens (generated)
+│   ├── scripts/             # generate-pwa-assets.mjs (PNG icons from icon.svg)
 │   ├── src/
 │   │   ├── App.jsx          # main app
 │   │   ├── data.js          # demo seed + shop/nav vocabulary
-│   │   ├── components/      # Sidebar, BottomBar, ui/ (Select, Switch, Sidebar)
+│   │   ├── components/      # Sidebar, BottomBar, InstallApp, ui/ (Select, Switch, Sidebar)
+│   │   ├── hooks/           # useInstallPrompt, useNow, …
 │   │   └── reactbits/       # GlassSurface, Beams, FluidGlass, GlassLens, …
 │   └── vite.config.js
 ├── tools/fetch-shop/        # Go + Python data pipeline (RL internal API → shop.json)
@@ -87,8 +90,31 @@ the repo-static assets from disk.
 cd app && npm test
 ```
 
-Runs the Vitest suite (29 tests: layout, shop switching, search, filters,
-favorites, modal, and `/api/shop` fetch).
+Runs the Vitest suite (36 tests: layout, shop switching, search, filters,
+favorites, modal, bottom bar, `/api/shop` fetch, and the install flow).
+
+## PWA / installable app
+
+The app is a **progressive web app**: on iPhone, tap **Share → Add to Home
+Screen** to get a full-screen, offline-capable app icon (free — no App Store
+needed). An in-app **Install app** button (hero pill on every viewport, plus a
+topbar icon on mobile and a sidebar footer button on desktop) triggers the
+native install prompt on Android/Chrome and shows step-by-step
+Add-to-Home-Screen guidance on iOS — it hides automatically once the app is
+installed. The offline service worker (Workbox, via
+`vite-plugin-pwa`) precaches the app shell, fonts, and 3D models, and
+runtime-caches the daily shop data (`/api/shop`, network-first) and item art —
+so the last-loaded shop keeps working with no connection.
+
+PNG icons and iOS splash screens are generated from `app/public/icon.svg` by
+`app/scripts/generate-pwa-assets.mjs` (run automatically before every build):
+
+```bash
+cd app && npm run pwa-assets   # regenerate icons/splash from icon.svg
+```
+
+Deploys are installable too: `./tools/deploy-pages.sh` bakes the snapshot into
+the build, and the service worker precaches it for offline use.
 
 ## Build & run (local production)
 

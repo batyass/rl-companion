@@ -28,6 +28,8 @@ import { Switch } from "./components/ui/switch.jsx";
 import { Sparkles } from "lucide-react";
 import Sidebar from "./components/Sidebar.jsx";
 import BottomBar from "./components/BottomBar.jsx";
+import { useInstallPrompt } from "./hooks/useInstallPrompt.js";
+import { InstallButton, InstallPill, InstallHelpModal } from "./components/InstallApp.jsx";
 
 const supportsWebGL = (() => {
   if (typeof document === "undefined" || typeof WebGLRenderingContext === "undefined") return false;
@@ -178,7 +180,7 @@ function ActivityMarquee({ items }) {
   );
 }
 
-function CompanionWidget() {
+function CompanionWidget({ mobile = false }) {
   const [open, setOpen] = useState(false);
   const [fabPos, setFabPos] = useState(null);
 
@@ -193,7 +195,12 @@ function CompanionWidget() {
         bottom: Math.max(14, window.innerHeight - fabPos.y + fabR + 12),
         maxWidth: `min(300px, calc(100vw - 28px))`,
       }
-    : undefined;
+    : {
+        // Plain (non-glass) FAB: anchor the panel above its fixed bottom-right spot.
+        right: mobile ? 14 : 22,
+        bottom: mobile ? 96 : 106,
+        maxWidth: `min(300px, calc(100vw - 28px))`,
+      };
 
   return (
     <div className={`companion-widget ${open ? "open" : ""}`}>
@@ -218,7 +225,9 @@ function CompanionWidget() {
           </div>
         </div>
       )}
-      {supportsWebGL ? (
+      {supportsWebGL && !mobile ? (
+        // The liquid-glass lens stays on desktop; mobile uses the plain black
+        // button (lighter, and the lens reads as a white blob on small screens).
         <React.Suspense fallback={null}>
           <FluidGlass
             open={open}
@@ -564,6 +573,23 @@ export default function App() {
   const [glassCursor, setGlassCursor] = useState(true);
   const searchInputRef = useRef(null);
 
+  // The cursor-following glass lens is pointless on touch screens (no cursor)
+  // and it overlays a large lens-shaped cutout over the content, so disable
+  // it below the mobile breakpoint.
+  const [isMobile, setIsMobile] = useState(() => {
+    return typeof window !== "undefined" && !!window.matchMedia?.("(max-width: 767px)").matches;
+  });
+  useEffect(() => {
+    const mql = window.matchMedia?.("(max-width: 767px)");
+    if (!mql?.addEventListener) return;
+    const onChange = (e) => setIsMobile(e.matches);
+    mql.addEventListener("change", onChange);
+    return () => mql.removeEventListener("change", onChange);
+  }, []);
+
+  // PWA install: native prompt on Chromium, Add-to-Home-Screen help on iOS.
+  const install = useInstallPrompt();
+
   // Press "g" to toggle the cursor-following fluid glass lens for comparison.
   useEffect(() => {
     const onKey = (e) => {
@@ -762,10 +788,9 @@ export default function App() {
           <span>RL Companion</span>
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-          <div className="credits-badge">
-            <CreditIcon />
-            <span>2,400 Credits</span>
-          </div>
+          {install.canInstall && (
+            <InstallButton onClick={install.install} />
+          )}
           <button className="icon-button" aria-label="Notifications">
             <BellIcon />
           </button>
@@ -781,6 +806,9 @@ export default function App() {
         onToggle={handleToggleSidebar}
         mobileOpen={mobileOpen}
         onClose={() => setMobileOpen(false)}
+        installButton={install.canInstall ? (
+          <InstallButton variant="full" onClick={install.install} />
+        ) : null}
       />
 
       <main className="main-content">
@@ -839,6 +867,9 @@ export default function App() {
               </GlassSurface>
             </span>
             <HeroTimer items={items} />
+            {install.canInstallHero && (
+              <InstallPill onClick={install.install} />
+            )}
           </div>
           <div className="hero-stats">
             <StatCounter value={items.length} label="Items tracked" />
@@ -1110,7 +1141,9 @@ export default function App() {
         />
       )}
 
-      {supportsWebGL && (
+      <InstallHelpModal open={install.helpOpen} onClose={install.closeHelp} />
+
+      {supportsWebGL && !isMobile && (
         <React.Suspense fallback={null}>
           <FluidGlassCursor
             enabled={glassCursor}
@@ -1119,7 +1152,7 @@ export default function App() {
         </React.Suspense>
       )}
 
-      <div className="glass-cursor-toggle">
+      {!isMobile && <div className="glass-cursor-toggle">
         <span className="toggle-icon" aria-hidden="true"><Sparkles size={15} strokeWidth={1.75} /></span>
         <span className="toggle-label">Glass lens</span>
         <Switch
@@ -1127,9 +1160,9 @@ export default function App() {
           onCheckedChange={(checked) => setGlassCursor(checked)}
           aria-label="Toggle cursor fluid glass"
         />
-      </div>
+      </div>}
 
-      <CompanionWidget />
+      <CompanionWidget mobile={isMobile} />
 
       {toast && (
         <div className="toast-container">

@@ -15,7 +15,8 @@ function clamp(v, min, max) {
 function defaultFabPos(sizePx) {
   const mobile = window.innerWidth <= 720;
   const right = mobile ? 14 : 22;
-  const bottom = mobile ? 76 : 86;
+  // Mobile clearance accounts for the floating glass bottom bar.
+  const bottom = mobile ? 86 : 86;
   return {
     x: window.innerWidth - right - sizePx / 2,
     y: window.innerHeight - bottom - sizePx / 2,

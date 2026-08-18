@@ -65,6 +65,7 @@ export default function Sidebar({
   onToggle = () => {},
   mobileOpen = false,
   onClose = () => {},
+  installButton = null,
 }) {
   return (
     <SidebarProvider
@@ -142,6 +143,12 @@ export default function Sidebar({
             );
           })}
         </SidebarContent>
+
+        {installButton && (
+          <div className="sidebar-footer">
+            {installButton}
+          </div>
+        )}
       </SidebarPanel>
     </SidebarProvider>
   );

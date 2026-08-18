@@ -1,5 +1,6 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
+import { VitePWA } from "vite-plugin-pwa";
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -93,7 +94,53 @@ function repoStatic() {
 
 export default defineConfig({
   root: appDir,
-  plugins: [react(), repoStatic()],
+  plugins: [
+    react(),
+    repoStatic(),
+    VitePWA({
+      // Ship our own manifest.webmanifest (with PNG icons) from public/.
+      manifest: false,
+      registerType: "autoUpdate",
+      // Offline-first service worker, generated with Workbox at build time.
+      workbox: {
+        // Precache the app shell, fonts, the baked shop.json snapshot, and the
+        // install assets. Item art (rl-art/, shop-img/) is large and changes
+        // daily, so it is runtime-cached instead of precached.
+        globPatterns: [
+          "**/*.{js,css,html,svg,json,woff2,ttf}",
+          "icons/*.png",
+          "splash/*.png",
+          "assets/**/*.glb",
+        ],
+        cleanupOutdatedCaches: true,
+        navigateFallbackDenylist: [/^\/api\//],
+        runtimeCaching: [
+          {
+            // Live shop data: network-first, falls back to the last good
+            // response (or the precached baked snapshot) when offline.
+            urlPattern: /\/api\/(shop|catalogue)/,
+            handler: "NetworkFirst",
+            options: {
+              cacheName: "rl-api",
+              networkTimeoutSeconds: 4,
+              expiration: { maxEntries: 20, maxAgeSeconds: 7 * 24 * 60 * 60 },
+              cacheableResponse: { statuses: [0, 200] },
+            },
+          },
+          {
+            // Item artwork + any other images: cache aggressively.
+            urlPattern: /\.(webp|png|jpe?g|avif|gif|svg)(\?.*)?$/,
+            handler: "CacheFirst",
+            options: {
+              cacheName: "rl-art",
+              expiration: { maxEntries: 600, maxAgeSeconds: 30 * 24 * 60 * 60 },
+              cacheableResponse: { statuses: [0, 200] },
+            },
+          },
+        ],
+      },
+    }),
+  ],
   server: {
     port: 5173,
     strictPort: true,

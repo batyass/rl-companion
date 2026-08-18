@@ -156,6 +156,56 @@ button:active {
   border: 1px solid var(--line);
 }
 
+/* PWA install button in the mobile topbar */
+.install-icon-button {
+  color: var(--accent);
+  background: var(--accent-soft);
+  border-color: var(--accent-line);
+}
+
+.install-icon-button:hover {
+  border-color: var(--accent);
+  box-shadow: 0 0 14px rgba(0, 163, 255, 0.25);
+}
+
+/* PWA install button in the desktop sidebar footer */
+.sidebar-install {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  height: 38px;
+  padding: 0 14px;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+  background: linear-gradient(90deg, rgba(255, 107, 0, 0.16), rgba(0, 163, 255, 0.14));
+  border: 1px solid var(--accent-line);
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.sidebar-install svg {
+  color: var(--accent);
+  flex-shrink: 0;
+}
+
+.sidebar-install:hover {
+  border-color: var(--accent);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 0 16px rgba(0, 163, 255, 0.2);
+}
+
+.sidebar.collapsed .sidebar-install {
+  justify-content: center;
+  padding: 0;
+}
+
+.sidebar.collapsed .sidebar-install-label {
+  display: none;
+}
+
 /* Sidebar Component */
 .sidebar-backdrop {
   position: fixed;
@@ -360,6 +410,8 @@ button:active {
 
 .sidebar-footer {
   flex-shrink: 0;
+  padding: 12px;
+  border-top: 1px solid var(--line);
 }
 
 .sidebar-trigger {
@@ -368,32 +420,76 @@ button:active {
   justify-content: center;
 }
 
-/* Bottom Bar Component (Mobile) */
-.bottom-bar {
+/* Bottom Bar Component (Mobile) — a real GlassSurface pill, identical to the
+   hero pills: the component renders the frost/border, .pill-glass supplies the
+   shared pill treatment, and these rules only position it on the screen.
+   Note the .glass-surface suffix: GlassSurface.css sets position:relative on
+   .glass-surface with equal specificity, and it wins on source order — without
+   this bump the bar renders in-flow at the bottom of the page instead of
+   floating. */
+.bottom-bar.glass-surface {
   display: none;
   position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 64px;
-  background: rgba(18, 23, 33, 0.7);
-  backdrop-filter: blur(20px) saturate(180%);
-  border-top: 1px solid var(--line);
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: calc(10px + env(safe-area-inset-bottom));
   z-index: 80;
-  padding-bottom: env(safe-area-inset-bottom);
-  justify-content: space-around;
+}
+
+.bottom-bar.glass-surface .glass-surface__content {
+  display: flex;
   align-items: center;
+  justify-content: space-around;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  background: transparent;
+  color: var(--text);
+}
+
+/* The nav sits inside GlassSurface's content wrapper; it must stretch to the
+   full bar and lay its tabs out in a row, or they stack into a clipped column. */
+.bottom-bar.glass-surface .bottom-bar__content {
+  position: relative;
+  display: flex;
+  align-items: stretch;
+  justify-content: space-around;
+  width: 100%;
+  height: 100%;
+}
+
+/* iOS-style active-tab indicator: a small pill of normal CSS frost (plain
+   backdrop-filter blur — not the SVG displacement glass) that slides between
+   tabs, sitting behind the active tab's icon + label. */
+.bottom-bar.glass-surface .tab-indicator {
+  position: absolute;
+  top: 4px;
+  bottom: 4px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(16px) saturate(1.8);
+  -webkit-backdrop-filter: blur(16px) saturate(1.8);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.14),
+    0 3px 12px rgba(0, 0, 0, 0.28);
+  transition:
+    left 0.32s cubic-bezier(0.22, 1, 0.36, 1),
+    width 0.32s cubic-bezier(0.22, 1, 0.36, 1);
+  z-index: 0;
+  pointer-events: none;
 }
 
 .tab-item {
   position: relative;
+  z-index: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   flex: 1;
   height: 100%;
-  color: var(--text-2);
+  color: var(--text);
   gap: 2px;
 }
 
@@ -416,8 +512,9 @@ button:active {
 }
 
 .tab-label {
-  font-size: 11px;
-  font-weight: 500;
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.01em;
 }
 
 .tab-badge {
@@ -460,6 +557,7 @@ button:active {
 .hero-meta {
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
   gap: 12px;
   margin-top: 18px;
 }
@@ -535,6 +633,8 @@ button:active {
   align-items: center;
   gap: 8px;
   padding: 0 18px;
+  /* Transparent: the search-specular SpecularButton behind uses the exact
+     same props/baseColor as the Filters button, so the two render identically. */
 }
 
 .search-field .search-icon {
@@ -557,6 +657,10 @@ button:active {
   outline: none;
   color: var(--text);
   font-size: 14px;
+}
+
+.search-field .search-input::placeholder {
+  color: var(--text-3);
 }
 
 .search-field .kbd-hint {
@@ -841,6 +945,7 @@ button:active {
   align-items: flex-end;
   justify-content: space-between;
   gap: 8px;
+  min-width: 0;
 }
 
 .item-name {
@@ -851,6 +956,10 @@ button:active {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.item-text {
+  min-width: 0;
 }
 
 .item-type {
@@ -902,6 +1011,8 @@ button:active {
   border-radius: 8px;
   background: rgba(255, 107, 0, 0.1);
   border: 1px solid var(--orange-line);
+  /* never let the price chip get squeezed off a narrow card */
+  flex-shrink: 0;
 }
 
 /* Official Rocket League credits icon (same asset rlshop.gg serves) */
@@ -1131,19 +1242,23 @@ button:active {
   .sidebar .group-label,
   .sidebar .nav-item-label,
   .sidebar .nav-item-count,
-  .sidebar .collapse-toggle { display: none; }
+  .sidebar .collapse-toggle,
+  .sidebar .sidebar-install-label { display: none; }
   .sidebar .sidebar-header { justify-content: center; padding: 0; }
   .sidebar .nav-item { justify-content: center; padding: 0; gap: 0; }
+  .sidebar .sidebar-install { justify-content: center; padding: 0; }
 
   /* expand to the full panel on hover */
   .sidebar:hover { width: 260px; }
   .sidebar:hover .brand-name,
   .sidebar:hover .group-label,
   .sidebar:hover .nav-item-label,
-  .sidebar:hover .nav-item-count { display: inline-block; }
+  .sidebar:hover .nav-item-count,
+  .sidebar:hover .sidebar-install-label { display: inline-block; }
   .sidebar:hover .collapse-toggle { display: flex; }
   .sidebar:hover .sidebar-header { justify-content: space-between; padding: 0 20px; }
   .sidebar:hover .nav-item { justify-content: flex-start; padding: 0 12px; gap: 10px; }
+  .sidebar:hover .sidebar-install { justify-content: flex-start; padding: 0 14px; }
 }
 
 @media (max-width: 900px) {
@@ -1152,6 +1267,24 @@ button:active {
 }
 
 @media (max-width: 767px) {
+  /* Stack the shell vertically: the mobile topbar must sit ABOVE the content,
+     not as a flex-row item beside a main-content that flexes to its 1376px
+     max-width (which blew the layout out to ~1670px wide on phones). */
+  .app-layout {
+    flex-direction: column;
+  }
+
+  /* No visible scrollbar on phones (native mobile apps don't show one) */
+  html, body {
+    scrollbar-width: none;
+  }
+  html::-webkit-scrollbar,
+  body::-webkit-scrollbar {
+    display: none;
+  }
+  .topbar {
+    width: 100%;
+  }
   .sidebar {
     transform: translateX(-100%);
     width: 260px !important;
@@ -1159,24 +1292,33 @@ button:active {
   .sidebar.mobile-open {
     transform: translateX(0);
   }
+  /* The mobile drawer is full-width, so the install label always shows */
+  .sidebar .sidebar-install-label { display: inline; }
+  .sidebar .sidebar-install { justify-content: center; padding: 0 14px; }
   .main-content {
     margin-left: 0 !important;
     padding: 20px 16px;
-    padding-bottom: 96px;
+    /* Clearance for the floating glass bottom bar */
+    padding-bottom: 128px;
   }
   .topbar { display: flex; }
-  .bottom-bar { display: flex; }
+  .bottom-bar.glass-surface { display: flex; }
   .modal-dialog { flex-direction: column; }
   .modal-art-panel { min-height: 200px; }
 
   /* Hero compacts into a scannable stack */
-  .hero-card { margin-bottom: 20px; }
-  .hero-title { font-size: 30px; }
-  .hero-subtext { font-size: 14px; line-height: 1.45; }
-  .hero-cta-row { margin-top: 16px; }
-  .hero-meta { flex-wrap: wrap; margin-top: 16px; }
-  .hero-stats { gap: 18px; margin-top: 16px; }
-  .hero-stat strong { font-size: 24px; }
+  .hero-card { margin-bottom: 16px; }
+  .hero-title { font-size: 26px; margin-bottom: 4px; }
+  .hero-subtext { font-size: 13.5px; line-height: 1.4; }
+  .hero-cta-row { gap: 10px; margin-top: 12px; }
+  .hero-meta { gap: 10px; margin-top: 12px; }
+  .hero-stats { gap: 14px 26px; margin-top: 12px; padding-top: 12px; }
+  .hero-stat strong { font-size: 18px; }
+  .hero-stat .stat-label { font-size: 9px; letter-spacing: 0.07em; }
+  .pill-glass .glass-surface__content { padding: 6px 13px; font-size: 12.5px; }
+
+  /* Paint chip (top-left) and countdown (bottom-right) never collide */
+  .time-chip { top: auto; bottom: 8px; right: 8px; }
 
   /* Search + filter stack full-width */
   .toolbar {
@@ -1186,7 +1328,9 @@ button:active {
     margin-top: 16px;
     margin-bottom: 18px;
   }
-  .search-wrap { max-width: none; width: 100%; height: 44px; }
+  /* flex: 1 means flex-basis: 0% — in this column layout that collapses the
+     wrap's HEIGHT to ~0 (it only worked as a row on desktop). Pin it. */
+  .search-wrap { flex: none; max-width: none; width: 100%; height: 44px; }
   .filter-specular-main { width: 100%; height: 44px; }
 
   /* Filter dropdowns go full-width and stack */
@@ -1212,16 +1356,17 @@ button:active {
 }
 
 @media (max-width: 480px) {
-  .hero-title { font-size: 26px; }
-  .hero-cta-row { flex-direction: column; }
+  .hero-title { font-size: 24px; }
+  /* CTAs shrink to content width instead of spanning the full screen */
+  .hero-cta-row { flex-wrap: wrap; }
   .pill-glass.pill-primary,
-  .pill-glass.pill-ghost { width: 100%; }
-  .pill-glass .glass-surface__content { width: 100%; padding: 9px 18px; }
+  .pill-glass.pill-ghost { width: auto; }
+  .pill-glass .glass-surface__content { padding: 6px 13px; font-size: 12.5px; }
 
-  /* Stats become a tight 3-up readout */
-  .hero-stats { gap: 12px; }
-  .hero-stat strong { font-size: 22px; }
-  .hero-stat .stat-label { font-size: 9.5px; letter-spacing: 0.05em; }
+  /* Stats become a tight readout */
+  .hero-stats { gap: 12px 22px; }
+  .hero-stat strong { font-size: 16px; }
+  .hero-stat .stat-label { font-size: 8.5px; letter-spacing: 0.06em; }
 
   /* Cards tighten so two fit comfortably */
   .item-card { padding: 10px; gap: 9px; }
@@ -1366,6 +1511,112 @@ button:active {
   box-shadow: 0 0 20px rgba(21, 230, 181, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.08);
 }
 
+/* ── iOS Add-to-Home-Screen help modal ─────────────────────── */
+.install-help-dialog {
+  max-width: 420px;
+  flex-direction: column;
+}
+
+.install-help-body {
+  position: relative;
+  padding: 32px 28px 28px;
+  text-align: center;
+}
+
+.install-help-body .modal-close-btn {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+}
+
+.install-help-icon {
+  display: grid;
+  place-items: center;
+  width: 64px;
+  height: 64px;
+  margin: 0 auto 16px;
+  border-radius: 18px;
+  color: #fff;
+  background: linear-gradient(135deg, #FF6B00, #00A3FF);
+  box-shadow: 0 12px 30px rgba(255, 107, 0, 0.3), 0 4px 14px rgba(0, 163, 255, 0.25);
+}
+
+.install-help-body h2 {
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.install-help-sub {
+  color: var(--text-2);
+  font-size: 14px;
+  line-height: 1.5;
+  margin: 8px 0 20px;
+}
+
+.install-help-steps {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  text-align: left;
+}
+
+.install-help-steps li {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  border-radius: var(--radius-sm);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--line);
+  font-size: 13.5px;
+  line-height: 1.45;
+  color: var(--text-2);
+}
+
+.install-help-steps li b {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.install-step-num {
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--accent);
+  background: var(--accent-soft);
+  border: 1px solid var(--accent-line);
+}
+
+.install-share-icon {
+  display: inline-block;
+  vertical-align: -3px;
+  margin: 0 2px;
+  color: var(--accent);
+}
+
+.install-help-done {
+  width: 100%;
+  height: 44px;
+  margin-top: 20px;
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 700;
+  color: #fff;
+  background: linear-gradient(90deg, #FF6B00, #F85A1B 60%, #FF8A3D);
+  box-shadow: 0 8px 24px rgba(255, 107, 0, 0.3);
+}
+
+.install-help-done:hover {
+  filter: brightness(1.07);
+}
+
 /* Keyboard hint chip */
 .kbd-hint {
   position: absolute;
@@ -1465,6 +1716,9 @@ button:active {
 
 .pill-glass.pill-live .glass-surface__content {
   padding-left: 34px;
+}
+.pill-glass.pill-install:hover {
+  filter: brightness(1.12);
 }
 
 .live-pill .pill-glass {
@@ -1616,7 +1870,12 @@ button:active {
   color: #fff;
   background: linear-gradient(135deg, #FF6B00, #00A3FF);
   box-shadow: 0 10px 30px rgba(255, 107, 0, 0.35), 0 4px 14px rgba(0, 163, 255, 0.25);
-  position: relative;
+  /* Plain fallback FAB: fixed bottom-right, matching the glass FAB's spot.
+     (position:relative here would drop it into the top-left of the fixed
+     full-screen widget wrapper, covering the topbar.) */
+  position: fixed;
+  right: 22px;
+  bottom: 86px;
 }
 
 .companion-fab::after {
@@ -1708,6 +1967,16 @@ button:active {
 @media (max-width: 720px) {
   .companion-panel {
     width: min(300px, calc(100vw - 56px));
+  }
+  .companion-fab {
+    right: 14px;
+    bottom: 86px;
+    /* Mobile: solid black FAB (the gradient is the desktop fallback; the
+       fluid-glass lens is desktop-only, so the plain button now shows on
+       phones and needs a dark look + a hairline ring to read on dark bg). */
+    background: #000;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.55);
   }
 }
 

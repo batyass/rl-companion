@@ -27,4 +27,23 @@ describe("BottomBar component", () => {
   it("renders default props without error", () => {
     expect(() => render(<BottomBar />)).not.toThrow();
   });
+
+  it("shows the iOS-style indicator pill behind the active tab and moves it on switch", () => {
+    const { rerender } = render(
+      <BottomBar tabs={MOBILE_TABS} active="featured" counts={mockCounts} />
+    );
+
+    // jsdom reports offsetWidth 0, so stub the geometry of the Daily button
+    // before switching to it; the indicator must be measured from the real tab.
+    const dailyBtn = screen.getByText("Daily").closest("button");
+    Object.defineProperty(dailyBtn, "offsetLeft", { configurable: true, value: 200 });
+    Object.defineProperty(dailyBtn, "offsetWidth", { configurable: true, value: 90 });
+
+    rerender(<BottomBar tabs={MOBILE_TABS} active="supersonic" counts={mockCounts} />);
+
+    const indicator = document.querySelector(".tab-indicator");
+    expect(indicator).toBeInTheDocument();
+    expect(indicator.style.left).toBe("204px");
+    expect(indicator.style.width).toBe("82px");
+  });
 });
