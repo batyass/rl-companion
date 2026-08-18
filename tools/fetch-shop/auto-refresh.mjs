@@ -25,13 +25,34 @@ const SHOP_FILE = path.join(SHOP_DIR, "out", "shop.json");
 const LOG_FILE = path.join(SHOP_DIR, "refresh.log");
 const STATE_FILE = path.join(SHOP_DIR, ".auto-refresh-state");
 
-// Refresh when the data is older than this. The shop rotates ~daily at a
-// fixed hour, so a sub-day window means the site never lags more than this
-// plus the hourly check interval behind rlshop.gg. Fetches are cheap: the
-// rlshop.gg path is a handful of JSON requests with locally cached images.
-const STALE_MS = 3 * 60 * 60 * 1000;
+// Refresh when the data is older than this. This is a fallback safety net:
+// the primary trigger is rotation-aware scheduling (see installAutoRefresh),
+// which fires shortly after the earliest item endDate in the data, so the
+// site tracks rlshop.gg's actual rotation times instead of lagging up to
+// STALE_MS behind them.
+const STALE_MS = 2 * 60 * 60 * 1000;
 // Don't retry a failed refresh more than once an hour.
 const RETRY_MS = 60 * 60 * 1000;
+// Refresh this long after the earliest future item endDate.
+const ROTATION_BUFFER_MS = 2 * 60 * 1000;
+// Never schedule the rotation timer closer than this (avoids hot loops).
+const MIN_ROTATION_DELAY_MS = 30 * 1000;
+
+function openLog() {
+  try {
+    return fs.openSync(LOG_FILE, "a");
+  } catch {
+    return null;
+  }
+}
+
+function writeLog(log, msg) {
+  try {
+    if (log) fs.writeSync(log, msg);
+  } catch {
+    /* keep going even if logging fails */
+  }
+}
 
 export function isStale() {
   try {
@@ -104,14 +125,66 @@ export function maybeRefresh() {
   return true;
 }
 
-// Check shortly after startup, then on a timer (default hourly).
+// Earliest future item endDate (seconds) in the current shop data, or null
+// if there is none (missing/corrupt file, or no future endDate).
+export function nextRotationSeconds() {
+  try {
+    const data = JSON.parse(fs.readFileSync(SHOP_FILE, "utf8"));
+    const nowS = Date.now() / 1000;
+    let next = Infinity;
+    for (const item of data.items || []) {
+      const e = item.endDate;
+      if (typeof e === "number" && e > nowS) next = Math.min(next, e);
+    }
+    return Number.isFinite(next) ? next : null;
+  } catch {
+    return null;
+  }
+}
+
+// Check shortly after startup, then on a fallback timer, and — the primary
+// trigger — refresh shortly after the next item rotation in the data.
 export function installAutoRefresh(intervalMs = 60 * 60 * 1000) {
+  const log = openLog();
+  writeLog(
+    log,
+    `\n[${new Date().toISOString()}] auto-refresh armed: shop=${SHOP_FILE} staleMs=${STALE_MS} fallbackCheckMs=${intervalMs}\n`
+  );
+
   const first = setTimeout(maybeRefresh, 5 * 1000);
   const timer = setInterval(maybeRefresh, intervalMs);
   if (typeof first.unref === "function") first.unref();
   if (typeof timer.unref === "function") timer.unref();
+
+  // Primary trigger: refresh just after the earliest item endDate, then
+  // re-arm from the freshly fetched data for the following rotation.
+  let rotationTimer;
+  const armRotation = () => {
+    if (rotationTimer) clearTimeout(rotationTimer);
+    const next = nextRotationSeconds();
+    if (next == null) {
+      writeLog(
+        log,
+        `[${new Date().toISOString()}] auto-refresh: no future endDate in data, relying on ${intervalMs / 60000}-min fallback\n`
+      );
+      return;
+    }
+    const delay = Math.max(MIN_ROTATION_DELAY_MS, next * 1000 + ROTATION_BUFFER_MS - Date.now());
+    writeLog(
+      log,
+      `[${new Date().toISOString()}] auto-refresh: next rotation ${new Date(next * 1000).toISOString()}, refreshing in ${Math.round(delay / 60000)} min\n`
+    );
+    rotationTimer = setTimeout(() => {
+      maybeRefresh();
+      armRotation();
+    }, delay);
+    if (typeof rotationTimer.unref === "function") rotationTimer.unref();
+  };
+  armRotation();
+
   return () => {
     clearTimeout(first);
     clearInterval(timer);
+    if (rotationTimer) clearTimeout(rotationTimer);
   };
 }

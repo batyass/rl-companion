@@ -1,5 +1,7 @@
 # RL Companion
 
+**GitHub:** <https://github.com/batyass/rl-companion> · **Live site:** <https://batyass.github.io/rl-companion/>
+
 A fast, Apple-style **Rocket League daily item shop mirror**. See exactly what's in
 the shop today — items, prices, paints, rarities, bundles, and live countdown
 timers — without launching the game.

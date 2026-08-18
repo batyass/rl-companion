@@ -32,6 +32,7 @@ const sharedCapture = {
   listeners: new Set(),
   raf: 0,
   onResize: null,
+  onRecapture: null,
   capturing: false,
 };
 
@@ -83,7 +84,15 @@ export function usePageCapture(enabled) {
         cancelAnimationFrame(sharedCapture.raf);
         sharedCapture.raf = requestAnimationFrame(runCapture);
       };
+      // The lens re-captures on a custom event fired when the shop tab (or any
+      // real content change) happens, so the refraction refreshes on demand
+      // instead of on a periodic timer.
+      sharedCapture.onRecapture = () => {
+        cancelAnimationFrame(sharedCapture.raf);
+        sharedCapture.raf = requestAnimationFrame(runCapture);
+      };
       window.addEventListener("resize", sharedCapture.onResize);
+      window.addEventListener("fluid-glass:recapture", sharedCapture.onRecapture);
       runCapture();
     }
 
@@ -91,8 +100,10 @@ export function usePageCapture(enabled) {
       sharedCapture.listeners.delete(setVersion);
       if (sharedCapture.listeners.size === 0) {
         window.removeEventListener("resize", sharedCapture.onResize);
+        window.removeEventListener("fluid-glass:recapture", sharedCapture.onRecapture);
         cancelAnimationFrame(sharedCapture.raf);
         sharedCapture.onResize = null;
+        sharedCapture.onRecapture = null;
       }
     };
   }, [enabled]);

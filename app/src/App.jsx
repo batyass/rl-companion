@@ -631,6 +631,19 @@ export default function App() {
     localStorage.setItem("rl-shop-active", shopKey);
   };
 
+  // Re-capture the glass lens snapshot when the shop tab changes, so the
+  // refraction shows the newly selected tab without a periodic timer. Runs
+  // after React commits the new tab, deferred a frame so its DOM is laid out.
+  const prevShopRef = useRef(activeShop);
+  useEffect(() => {
+    if (prevShopRef.current === activeShop) return;
+    prevShopRef.current = activeShop;
+    const id = requestAnimationFrame(() => {
+      window.dispatchEvent(new CustomEvent("fluid-glass:recapture"));
+    });
+    return () => cancelAnimationFrame(id);
+  }, [activeShop]);
+
   const handleToggleSidebar = () => {
     setSidebarCollapsed((prev) => {
       const next = !prev;
