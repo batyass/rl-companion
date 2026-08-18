@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useNow } from "./useNow.js";
 import {
   demoItems,
   SHOP_ORDER,
@@ -298,6 +299,42 @@ function fmtTime(ms) {
 // Fetched /api/shop data stores unix seconds; the local seed uses ms epochs.
 const endMs = (ts) => (ts ? (ts > 1e11 ? ts : ts * 1000) : 0);
 
+// Leaf countdown chip: ticks on its own shared clock so a single second passing
+// re-renders this one span instead of the entire App tree.
+function TimeChip({ endDate }) {
+  const now = useNow();
+  const remaining = Math.max(0, endMs(endDate) - now);
+  return <span className="time-chip">{fmtTime(remaining)}</span>;
+}
+
+// Leaf hero countdown: finds the nearest ending item and renders the timer pill
+// on the shared clock, so the hero no longer forces a full-tree re-render each
+// second.
+function HeroTimer({ items }) {
+  const now = useNow();
+  let earliest = Infinity;
+  for (const it of items) {
+    const ts = endMs(it.endDate);
+    if (ts && ts > now && ts < earliest) earliest = ts;
+  }
+  if (earliest === Infinity) return null;
+  return (
+    <GlassSurface
+      className="pill-glass pill-timer"
+      width="auto"
+      height="auto"
+      borderRadius={999}
+      backgroundOpacity={0.1}
+      saturation={1.6}
+      displace={0}
+      distortionScale={-180}
+      borderWidth={0.15}
+    >
+      ⏱ {fmtTime(earliest - now)}
+    </GlassSurface>
+  );
+}
+
 // The rlshop.gg mirror sometimes assigns one product id to several distinct
 // items (e.g. a team's decal and goal explosion). Duplicate ids collide as
 // React keys and silently drop cards from the grid, so suffix any repeat
@@ -349,7 +386,7 @@ function ItemArt({ item, className }) {
   );
 }
 
-function ItemCard({ item, onOpen, timeLeft }) {
+const ItemCard = React.memo(function ItemCard({ item, onOpen }) {
   const rarityClass = rarityKey(item.rarity);
   return (
     <article
@@ -362,7 +399,7 @@ function ItemCard({ item, onOpen, timeLeft }) {
       <div className="item-tile">
         <ItemArt item={item} />
         {item.paint && <span className={`paint-chip ${paintClass(item.paint)}`}>{item.paint}</span>}
-        {item.endDate && <span className="time-chip">{timeLeft}</span>}
+        {item.endDate && <TimeChip endDate={item.endDate} />}
       </div>
       <div className="item-details">
         <div className="item-text">
@@ -374,9 +411,9 @@ function ItemCard({ item, onOpen, timeLeft }) {
       </div>
     </article>
   );
-}
+});
 
-function ContentCard({ content }) {
+const ContentCard = React.memo(function ContentCard({ content }) {
   const rarityClass = rarityKey(content.rarity);
   return (
     <article className={`item-card content-card rarity-${rarityClass}`}>
@@ -393,13 +430,14 @@ function ContentCard({ content }) {
       </div>
     </article>
   );
-}
+});
 
-function BundleSection({ bundle, now, expanded = false }) {
+function BundleSection({ bundle, expanded = false }) {
   const [open, setOpen] = useState(expanded);
+  const now = useNow();
   const contents = bundle.contents || [];
-  const endMs = bundle.endDate ? (bundle.endDate > 1e11 ? bundle.endDate : bundle.endDate * 1000) : 0;
-  const remaining = endMs ? Math.max(0, endMs - now) : 0;
+  const end = bundle.endDate ? (bundle.endDate > 1e11 ? bundle.endDate : bundle.endDate * 1000) : 0;
+  const remaining = end ? Math.max(0, end - now) : 0;
 
   return (
     <section className="bundle-shop">
@@ -523,7 +561,6 @@ export default function App() {
     }
   });
   const [toast, setToast] = useState(null);
-  const [now, setNow] = useState(Date.now());
   const [glassCursor, setGlassCursor] = useState(true);
   const searchInputRef = useRef(null);
 
@@ -538,11 +575,6 @@ export default function App() {
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, []);
-
-  useEffect(() => {
-    const timer = setInterval(() => setNow(Date.now()), 1000);
-    return () => clearInterval(timer);
   }, []);
 
   useEffect(() => {
@@ -686,17 +718,6 @@ export default function App() {
     });
   };
 
-  const earliestEndDate = useMemo(() => {
-    let min = Infinity;
-    items.forEach((i) => {
-      const ts = endMs(i.endDate);
-      if (ts && ts > now && ts < min) min = ts;
-    });
-    return min === Infinity ? null : min;
-  }, [items, now]);
-
-  const heroSeconds = earliestEndDate ? Math.max(0, earliestEndDate - now) : 0;
-
   return (
     <div className={`app-layout ${sidebarCollapsed ? "sidebar-collapsed" : ""}`}>
       <div className="beams-bg" aria-hidden="true">
@@ -710,7 +731,7 @@ export default function App() {
               speed={2}
               noiseIntensity={1.75}
               scale={0.2}
-              rotation={0}
+              rotation={-32}
             />
           </React.Suspense>
         ) : null}
@@ -804,11 +825,7 @@ export default function App() {
                 Live item shop
               </GlassSurface>
             </span>
-            {earliestEndDate && (
-              <GlassSurface className="pill-glass pill-timer" width="auto" height="auto" borderRadius={999} backgroundOpacity={0.1} saturation={1.6} displace={0} distortionScale={-180} borderWidth={0.15}>
-                ⏱ {fmtTime(heroSeconds)}
-              </GlassSurface>
-            )}
+            <HeroTimer items={items} />
           </div>
           <div className="hero-stats">
             <StatCounter value={items.length} label="Items tracked" />
@@ -1040,21 +1057,17 @@ export default function App() {
             return (
               <>
                 {bundles.map((b) => (
-                  <BundleSection key={b.id || b.name} bundle={b} now={now} expanded={true} />
+                  <BundleSection key={b.id || b.name} bundle={b} expanded={true} />
                 ))}
                 {plain.length > 0 && (
                   <div className="item-grid">
-                    {plain.map((it) => {
-                      const remaining = it.endDate ? Math.max(0, endMs(it.endDate) - now) : 0;
-                      return (
-                        <ItemCard
-                          key={it.id}
-                          item={it}
-                          onOpen={setSelectedItem}
-                          timeLeft={it.endDate ? fmtTime(remaining) : null}
-                        />
-                      );
-                    })}
+                    {plain.map((it) => (
+                      <ItemCard
+                        key={it.id}
+                        item={it}
+                        onOpen={setSelectedItem}
+                      />
+                    ))}
                   </div>
                 )}
               </>

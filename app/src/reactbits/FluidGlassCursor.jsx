@@ -41,7 +41,7 @@ export default function FluidGlassCursor({
   return (
     <div className="fluid-glass-cursor" style={{ zIndex }} aria-hidden="true">
       <Canvas
-        dpr={[1, 1.5]}
+        dpr={1}
         frameloop={hidden ? "never" : "always"}
         gl={{ alpha: true, powerPreference: "high-performance", antialias: true, premultipliedAlpha: false }}
         camera={{ position: [0, 0, CAMERA_Z], fov: CAMERA_FOV }}

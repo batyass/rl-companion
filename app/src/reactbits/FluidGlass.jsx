@@ -49,6 +49,7 @@ export default function FluidGlass({
   const draggingRef = useRef(false);
   const movedRef = useRef(false);
   const downInfoRef = useRef(null);
+  const stateRef = useRef(null);
   const { canvasRef, version } = usePageCapture(true);
 
   const applyPos = (x, y) => {
@@ -64,6 +65,20 @@ export default function FluidGlass({
     applyPos(posRef.current.x, posRef.current.y);
     reportPos();
     // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // frameloop="demand" only renders on explicit invalidate(), so re-render the
+  // lens whenever the shared page snapshot refreshes (new texture).
+  useEffect(() => {
+    stateRef.current?.invalidate();
+  }, [version]);
+
+  // Scrolling shifts the visible viewport window of the snapshot, so invalidate
+  // on scroll too (the lens has no pointer events, so nothing else would).
+  useEffect(() => {
+    const onScroll = () => stateRef.current?.invalidate();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
   const handlePointerDown = (e) => {
@@ -82,6 +97,7 @@ export default function FluidGlass({
       clamp(downInfoRef.current.tx + dx, sizePx / 2, window.innerWidth - sizePx / 2),
       clamp(downInfoRef.current.ty + dy, sizePx / 2, window.innerHeight - sizePx / 2)
     );
+    stateRef.current?.invalidate();
   };
 
   const handlePointerUp = () => {
@@ -96,10 +112,14 @@ export default function FluidGlass({
     <div className="fluid-glass" style={{ zIndex }} aria-hidden={false}>
       <Canvas
         dpr={[1, 1.5]}
-        frameloop={hidden ? "never" : "always"}
+        frameloop={hidden ? "never" : "demand"}
         gl={{ alpha: true, powerPreference: "high-performance", antialias: true, premultipliedAlpha: false }}
         camera={{ position: [0, 0, CAMERA_Z], fov: CAMERA_FOV }}
         style={{ pointerEvents: "none" }}
+        onCreated={(state) => {
+          stateRef.current = state;
+          state.invalidate();
+        }}
       >
         <Suspense fallback={null}>
           <GlassLens sizePx={sizePx} lensProps={lensProps} posRef={posRef} canvasRef={canvasRef} version={version} />

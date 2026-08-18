@@ -63,14 +63,42 @@ function usePageVisibility() {
   return hidden;
 }
 
+// The beams are an ambient backdrop, so render them at a steady ~30fps instead
+// of the display's full refresh rate — halving fill cost with no perceptible
+// loss in the slow, noise-based motion. The throttle is driven by
+// requestAnimationFrame (not setInterval) so frames land on vsync boundaries
+// and stay evenly spaced instead of stuttering.
+const BEAMS_FPS = 30;
+
 const CanvasWrapper = ({ children }) => {
   const hidden = usePageVisibility();
+  const stateRef = useRef(null);
+
+  useEffect(() => {
+    if (hidden) return;
+    let raf;
+    let last = 0;
+    const loop = (t) => {
+      raf = requestAnimationFrame(loop);
+      if (t - last >= 1000 / BEAMS_FPS) {
+        last = t;
+        stateRef.current?.invalidate();
+      }
+    };
+    raf = requestAnimationFrame(loop);
+    return () => cancelAnimationFrame(raf);
+  }, [hidden]);
+
   return (
     <Canvas
-      dpr={[1, 1.5]}
-      frameloop={hidden ? 'never' : 'always'}
+      dpr={1}
+      frameloop={hidden ? 'never' : 'demand'}
       gl={{ powerPreference: 'high-performance', antialias: false }}
       className="beams-container"
+      onCreated={(state) => {
+        stateRef.current = state;
+        state.invalidate();
+      }}
     >
       {children}
     </Canvas>
