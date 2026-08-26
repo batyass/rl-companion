@@ -1,0 +1,68 @@
+# Daily GitHub Pages redeploy: re-fetch the RL shop and publish a fresh
+# rotation, because the Pages site is a static snapshot that never updates
+# on its own (see README → "Static-hosting caveat").
+#
+# The shop rotates at 01:00 UTC (9pm ET during US daylight time), so this
+# runs ~10 minutes after — enough buffer, since Actions cron can be delayed
+# under load. Note: if the US clock changes to standard time, the rotation
+# moves to 02:00 UTC and this schedule should move to "2 1 * * *".
+#
+# One-time repo setting required: Settings → Actions → General → Workflow
+# permissions → "Read and write permissions", so the default GITHUB_TOKEN
+# may push to the gh-pages branch. (Alternative: a fine-grained PAT with
+# Contents read/write on this repo, stored as a GH_TOKEN secret, used in the
+# remote URL below instead of GITHUB_TOKEN.)
+#
+# Fail-safe: if rlshop.gg is unreachable, the fetch step fails and gh-pages
+# keeps the last good rotation until the next successful run.
+name: Daily shop deploy
+
+on:
+  schedule:
+    # 01:10 UTC = 9:10pm ET, right after the daily 9pm ET rotation
+    - cron: "10 1 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: daily-shop-deploy
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+          cache-dependency-path: app/package-lock.json
+
+      - name: Install app dependencies
+        working-directory: app
+        run: npm ci
+
+      - name: Fetch today's shop from rlshop.gg
+        # Public endpoints, no Epic login needed. Writes
+        # tools/fetch-shop/out/shop.json + out/img/ (paths are resolved
+        # relative to the script itself, so this works from the repo root).
+        run: python3 tools/fetch-shop/fetch-rlshop.py
+
+      - name: Publish to gh-pages
+        # Point origin at a token-authenticated URL so deploy-pages.sh's
+        # force-push works. GITHUB_TOKEN is scoped to this job and dies with
+        # it, so nothing persists.
+        run: |
+          git remote set-url origin "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git"
+          ./tools/deploy-pages.sh

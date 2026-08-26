@@ -80,9 +80,15 @@ function writeState(state) {
 
 let running = false;
 
-export function maybeRefresh() {
+// opts:
+//  - force: refresh even when the data file is younger than STALE_MS — used
+//    by the rotation trigger, which fires right at the endDate and must not
+//    be pushed to the 2-hour fallback cadence by a recent fallback refresh.
+//  - onDone(code): called with the refresh.sh exit code after the child
+//    finishes (only when a refresh was actually started).
+export function maybeRefresh(opts = {}) {
   if (running) return false;
-  if (!isStale()) return false;
+  if (!opts.force && !isStale()) return false;
   const state = readState();
   if (state.lastAttempt && Date.now() - state.lastAttempt < RETRY_MS) return false;
 
@@ -104,7 +110,8 @@ export function maybeRefresh() {
     }
   };
 
-  write(`\n[${stamp()}] auto-refresh: shop data is stale, running refresh.sh --no-login\n`);
+  const reason = opts.force ? "rotation" : "stale data";
+  write(`\n[${stamp()}] auto-refresh: ${reason}, running refresh.sh --no-login\n`);
 
   const child = spawn("bash", [path.join(SHOP_DIR, "refresh.sh"), "--no-login"], {
     detached: true,
@@ -121,6 +128,7 @@ export function maybeRefresh() {
       }
     }
     running = false;
+    if (typeof opts.onDone === "function") opts.onDone(code);
   });
   return true;
 }
@@ -151,13 +159,12 @@ export function installAutoRefresh(intervalMs = 60 * 60 * 1000) {
     `\n[${new Date().toISOString()}] auto-refresh armed: shop=${SHOP_FILE} staleMs=${STALE_MS} fallbackCheckMs=${intervalMs}\n`
   );
 
-  const first = setTimeout(maybeRefresh, 5 * 1000);
-  const timer = setInterval(maybeRefresh, intervalMs);
-  if (typeof first.unref === "function") first.unref();
-  if (typeof timer.unref === "function") timer.unref();
-
-  // Primary trigger: refresh just after the earliest item endDate, then
-  // re-arm from the freshly fetched data for the following rotation.
+  // Re-arm the rotation timer after any successful refresh, from the freshly
+  // written file. Previously the timer re-armed synchronously right after
+  // spawning the (detached) refresh child — while the old file was still on
+  // disk — so just past a rotation it found no future endDate and the
+  // rotation-aware trigger was lost for the rest of the process lifetime,
+  // leaving refreshes to the 2-hour fallback cadence.
   let rotationTimer;
   const armRotation = () => {
     if (rotationTimer) clearTimeout(rotationTimer);
@@ -175,11 +182,35 @@ export function installAutoRefresh(intervalMs = 60 * 60 * 1000) {
       `[${new Date().toISOString()}] auto-refresh: next rotation ${new Date(next * 1000).toISOString()}, refreshing in ${Math.round(delay / 60000)} min\n`
     );
     rotationTimer = setTimeout(() => {
-      maybeRefresh();
-      armRotation();
+      // The rotation has arrived: force a refresh even if the file is
+      // younger than STALE_MS, so a fallback refresh minutes before 9pm
+      // can't delay the rotation update. The retry throttle still applies.
+      maybeRefresh({
+        force: true,
+        onDone: (code) => {
+          if (code === 0) armRotation();
+        },
+      });
     }, delay);
     if (typeof rotationTimer.unref === "function") rotationTimer.unref();
   };
+
+  // Fallback path: refresh only when the data is actually stale, and re-arm
+  // the rotation timer once a refresh lands (the fresh file may carry a
+  // future endDate even when the startup data had none).
+  const refresh = () => {
+    maybeRefresh({
+      onDone: (code) => {
+        if (code === 0) armRotation();
+      },
+    });
+  };
+
+  const first = setTimeout(refresh, 5 * 1000);
+  const timer = setInterval(refresh, intervalMs);
+  if (typeof first.unref === "function") first.unref();
+  if (typeof timer.unref === "function") timer.unref();
+
   armRotation();
 
   return () => {
