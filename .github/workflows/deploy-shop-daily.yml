@@ -2,10 +2,13 @@
 # rotation, because the Pages site is a static snapshot that never updates
 # on its own (see README → "Static-hosting caveat").
 #
-# The shop rotates at 01:00 UTC (9pm ET during US daylight time), so this
-# runs ~10 minutes after — enough buffer, since Actions cron can be delayed
-# under load. Note: if the US clock changes to standard time, the rotation
-# moves to 02:00 UTC and this schedule should move to "2 1 * * *".
+# The in-game shop rotates every day at 21:00 in France (Europe/Paris). In
+# UTC that is 19:00 during summer (CEST, UTC+2) and 20:00 during winter
+# (CET, UTC+1). Because a fixed UTC cron can't follow the DST switch, we run
+# ~10 minutes after BOTH possible rotation times; whichever run fires after
+# that day's rotation always has the fresh shop, and the other is an
+# idempotent redeploy of the same data. Actions cron can also start up to
+# ~15 min late under load, so the 10-minute buffer is enough.
 #
 # One-time repo setting required: Settings → Actions → General → Workflow
 # permissions → "Read and write permissions", so the default GITHUB_TOKEN
@@ -19,8 +22,9 @@ name: Daily shop deploy
 
 on:
   schedule:
-    # 01:10 UTC = 9:10pm ET, right after the daily 9pm ET rotation
-    - cron: "10 1 * * *"
+    # 19:10 & 20:10 UTC = ~10 min after the 21:00 Paris rotation in both seasons
+    - cron: "10 19 * * *"
+    - cron: "10 20 * * *"
   workflow_dispatch:
 
 permissions:
