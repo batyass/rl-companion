@@ -22,9 +22,13 @@ name: Daily shop deploy
 
 on:
   schedule:
-    # 19:10 & 20:10 UTC = ~10 min after the 21:00 Paris rotation in both seasons
+    # 19:10, 20:10 & 21:10 UTC bracket the 21:00 Paris rotation in both
+    # seasons (19:00 UTC in summer CEST, 20:00 UTC in winter CET). The two
+    # extra slots are retry chances: if one run is late, cancelled, or fails,
+    # the next one still catches the fresh rotation.
     - cron: "10 19 * * *"
     - cron: "10 20 * * *"
+    - cron: "10 21 * * *"
   workflow_dispatch:
 
 permissions:
@@ -63,10 +67,21 @@ jobs:
         # relative to the script itself, so this works from the repo root).
         run: python3 tools/fetch-shop/fetch-rlshop.py
 
+      - name: Check if the shop changed since the last deploy
+        # Most runs see the *same* rotation (the shop changes once a day), so
+        # rebuilding + force-pushing for identical data is wasted work. This
+        # compares the fresh fetch against the live Pages site and sets
+        # changed=true|false. On any uncertainty it deploys, so a failed
+        # comparison can never freeze the site.
+        id: check
+        run: python3 tools/fetch-shop/check-unchanged.py
+
       - name: Publish to gh-pages
-        # Point origin at a token-authenticated URL so deploy-pages.sh's
-        # force-push works. GITHUB_TOKEN is scoped to this job and dies with
-        # it, so nothing persists.
+        # Only when the shop actually changed (or the comparison was
+        # inconclusive). Point origin at a token-authenticated URL so
+        # deploy-pages.sh's force-push works. GITHUB_TOKEN is scoped to this
+        # job and dies with it, so nothing persists.
+        if: steps.check.outputs.changed == 'true'
         run: |
           git remote set-url origin "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git"
           ./tools/deploy-pages.sh
