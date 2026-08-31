@@ -631,13 +631,20 @@ export default function App() {
     const sources = ["/api/shop", "shop.json"];
     for (const source of sources) {
       try {
-        const res = await fetch(source, { cache: "no-store" });
+        // GitHub Pages/CDNs may cache the static snapshot despite no-store.
+        // A query based on the current time guarantees each poll can see a
+        // newly deployed shop file while remaining harmless for the API.
+        const url = `${source}?refresh=${Date.now()}`;
+        const res = await fetch(url, { cache: "no-store" });
         if (!res.ok) continue;
         const data = await res.json();
         if (!data || !Array.isArray(data.items) || data.items.length === 0) continue;
         const generated = data.generatedAt ?? 0;
-        if (lastGeneratedRef.current === generated) return;
-        lastGeneratedRef.current = generated;
+        // Older generated snapshots may not include generatedAt. In that case
+        // compare the payload so the first deployment update is still applied.
+        const version = generated || JSON.stringify(data.items);
+        if (lastGeneratedRef.current === version) return;
+        lastGeneratedRef.current = version;
         setItems(withUniqueIds(data.items));
         return;
       } catch {
