@@ -562,6 +562,33 @@ button:active {
   margin-top: 18px;
 }
 
+.refresh-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  color: var(--text-2);
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.refresh-status-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--green);
+  box-shadow: 0 0 8px rgba(48, 209, 88, 0.55);
+}
+
+.refresh-status.refreshing .refresh-status-dot {
+  background: var(--primary-orange);
+  box-shadow: 0 0 8px rgba(255, 107, 0, 0.55);
+  animation: refresh-pulse 1s ease-in-out infinite;
+}
+
+@keyframes refresh-pulse {
+  50% { opacity: 0.35; }
+}
+
 .live-chip {
   display: inline-flex;
   align-items: center;

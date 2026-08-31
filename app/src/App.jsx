@@ -319,6 +319,22 @@ function TimeChip({ endDate }) {
 // Leaf hero countdown: finds the nearest ending item and renders the timer pill
 // on the shared clock, so the hero no longer forces a full-tree re-render each
 // second.
+function formatUpdatedAt(value) {
+  if (!value) return "Waiting for first update";
+  const date = new Date(value > 1e12 ? value : value * 1000);
+  if (Number.isNaN(date.getTime())) return "Update time unavailable";
+  return `Updated ${date.toLocaleString([], { dateStyle: "medium", timeStyle: "short" })}`;
+}
+
+function RefreshStatus({ updatedAt, refreshing }) {
+  return (
+    <span className={`refresh-status ${refreshing ? "refreshing" : ""}`} aria-live="polite">
+      <span className="refresh-status-dot" aria-hidden="true" />
+      {refreshing ? "Checking for updates…" : formatUpdatedAt(updatedAt)}
+    </span>
+  );
+}
+
 function HeroTimer({ items }) {
   const now = useNow();
   let earliest = Infinity;
@@ -571,6 +587,8 @@ export default function App() {
   });
   const [toast, setToast] = useState(null);
   const [glassCursor, setGlassCursor] = useState(true);
+  const [updatedAt, setUpdatedAt] = useState(null);
+  const [refreshing, setRefreshing] = useState(false);
   const searchInputRef = useRef(null);
 
   // The cursor-following glass lens is pointless on touch screens (no cursor)
@@ -626,6 +644,7 @@ export default function App() {
   // minutes and hot-swaps the items when a newer file lands — no reload.
   const lastGeneratedRef = useRef(null);
   const loadLiveItems = useCallback(async () => {
+    setRefreshing(true);
     // Live API first (dev / self-hosted), then the baked static snapshot
     // (GitHub Pages and other static hosts), then the bundled demo seed.
     const sources = ["/api/shop", "shop.json"];
@@ -645,12 +664,15 @@ export default function App() {
         const version = generated || JSON.stringify(data.items);
         if (lastGeneratedRef.current === version) return;
         lastGeneratedRef.current = version;
+        setUpdatedAt(generated || Date.now());
         setItems(withUniqueIds(data.items));
+        setRefreshing(false);
         return;
       } catch {
         /* try the next source */
       }
     }
+    setRefreshing(false);
   }, []);
 
   useEffect(() => {
@@ -874,6 +896,7 @@ export default function App() {
               </GlassSurface>
             </span>
             <HeroTimer items={items} />
+            <RefreshStatus updatedAt={updatedAt} refreshing={refreshing} />
             {install.canInstallHero && (
               <InstallPill onClick={install.install} />
             )}
