@@ -22,3 +22,10 @@ tools/fetch-shop/__pycache__/
 # misc
 *.log
 .DS_Store
+
+# iOS screenshots & backups
+ios/screenshots/
+ios/backup_working_v1/
+*.xcodeproj/project.xcworkspace/xcuserdata/
+*.xcodeproj/xcuserdata/
+DerivedData/

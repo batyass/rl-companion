@@ -1,0 +1,251 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		0D6768CB12124C4CBC804C53 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 43C6A2BA21374CF4AB6CDBFF /* Assets.xcassets */; };
+		A1B2C3D4E5F6789012345678 /* shop.json in Resources */ = {isa = PBXBuildFile; fileRef = B2C3D4E5F678901234567890 /* shop.json */; };
+		317BE3D5575B4CF2BC92E69F /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2D1445E94A7472AA8C01D87 /* Models.swift */; };
+		7478E57FD9F043CBA28FC8AC /* ShopViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 272FD4B7864B4A40A03D19C7 /* ShopViewModel.swift */; };
+		BA7CF1831CA2424C848DFC8A /* Views.swift in Sources */ = {isa = PBXBuildFile; fileRef = A44F339921864875879C9BAD /* Views.swift */; };
+		DDE7CD20F96543C9B4734F9A /* RLCompanionApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47FB2E311949475ABC021F0F /* RLCompanionApp.swift */; };
+		E00A1B2C3D4E5F60718293A4 /* DesignSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = E00A1B2C3D4E5F60718293A5 /* DesignSystem.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		272FD4B7864B4A40A03D19C7 /* ShopViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopViewModel.swift; sourceTree = "<group>"; };
+		43C6A2BA21374CF4AB6CDBFF /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		47FB2E311949475ABC021F0F /* RLCompanionApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RLCompanionApp.swift; sourceTree = "<group>"; };
+		A44F339921864875879C9BAD /* Views.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Views.swift; sourceTree = "<group>"; };
+		B2C3D4E5F678901234567890 /* shop.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = shop.json; sourceTree = "<group>"; };
+		C2D1445E94A7472AA8C01D87 /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
+		C2F766BE46974C8EBA625BF3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		CB1FF8B8BCC342BABA1EF780 /* RLCompanion.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RLCompanion.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		E00A1B2C3D4E5F60718293A5 /* DesignSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DesignSystem.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		A1ADC74D69F1468CA39E3CE4 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		3C71FA25E8634F1F8425CAA6 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				CB1FF8B8BCC342BABA1EF780 /* RLCompanion.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		4731212B9A7E4FBD9920AEA3 /* RLCompanion */ = {
+			isa = PBXGroup;
+			children = (
+				47FB2E311949475ABC021F0F /* RLCompanionApp.swift */,
+				C2D1445E94A7472AA8C01D87 /* Models.swift */,
+				272FD4B7864B4A40A03D19C7 /* ShopViewModel.swift */,
+				E00A1B2C3D4E5F60718293A5 /* DesignSystem.swift */,
+				A44F339921864875879C9BAD /* Views.swift */,
+				43C6A2BA21374CF4AB6CDBFF /* Assets.xcassets */,
+				B2C3D4E5F678901234567890 /* shop.json */,
+				C2F766BE46974C8EBA625BF3 /* Info.plist */,
+			);
+			path = RLCompanion;
+			sourceTree = "<group>";
+		};
+		DD9D3F9EF26D44979139BDBB = {
+			isa = PBXGroup;
+			children = (
+				4731212B9A7E4FBD9920AEA3 /* RLCompanion */,
+				3C71FA25E8634F1F8425CAA6 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		22822B76DCEF48288593457F /* RLCompanion */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B5471465BE8043648E75C4FD /* Build configuration list for PBXNativeTarget "RLCompanion" */;
+			buildPhases = (
+				0064E2A4BC0B480BB04F90FE /* Sources */,
+				A1ADC74D69F1468CA39E3CE4 /* Frameworks */,
+				550E821F25E54DC3923B069D /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = RLCompanion;
+			productName = RLCompanion;
+			productReference = CB1FF8B8BCC342BABA1EF780 /* RLCompanion.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		C8FEEC2DF0DC42A5812B7BE9 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1500;
+				LastUpgradeCheck = 1500;
+				TargetAttributes = {
+					22822B76DCEF48288593457F = {
+						CreatedOnToolsVersion = 15.0;
+					};
+				};
+			};
+			buildConfigurationList = 5DF4B059D2AF420DB40D80E5 /* Build configuration list for PBXProject "RLCompanion" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = fr;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				fr,
+				Base,
+			);
+			mainGroup = DD9D3F9EF26D44979139BDBB;
+			productRefGroup = 3C71FA25E8634F1F8425CAA6 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				22822B76DCEF48288593457F /* RLCompanion */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		550E821F25E54DC3923B069D /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0D6768CB12124C4CBC804C53 /* Assets.xcassets in Resources */,
+				A1B2C3D4E5F6789012345678 /* shop.json in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		0064E2A4BC0B480BB04F90FE /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				317BE3D5575B4CF2BC92E69F /* Models.swift in Sources */,
+				7478E57FD9F043CBA28FC8AC /* ShopViewModel.swift in Sources */,
+				BA7CF1831CA2424C848DFC8A /* Views.swift in Sources */,
+				DDE7CD20F96543C9B4734F9A /* RLCompanionApp.swift in Sources */,
+				E00A1B2C3D4E5F60718293A4 /* DesignSystem.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		7A28751478D84BF29E758C5B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = RLCompanion/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.batyass.RLCompanion;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		94F1A5BDE30349A9B489569B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = RLCompanion/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.batyass.RLCompanion;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		B230AEFB01F940F1BE3B35CF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		E50B205D973740D2A687DE7A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		5DF4B059D2AF420DB40D80E5 /* Build configuration list for PBXProject "RLCompanion" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B230AEFB01F940F1BE3B35CF /* Debug */,
+				E50B205D973740D2A687DE7A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		B5471465BE8043648E75C4FD /* Build configuration list for PBXNativeTarget "RLCompanion" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7A28751478D84BF29E758C5B /* Debug */,
+				94F1A5BDE30349A9B489569B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+	};
+	rootObject = C8FEEC2DF0DC42A5812B7BE9 /* Project object */;
+}
